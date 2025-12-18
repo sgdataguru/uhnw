@@ -16,9 +16,10 @@ interface SignalCardProps {
   onMarkAsActioned?: (id: string) => void;
 }
 
-function formatTimeAgo(date: Date): string {
+function formatTimeAgo(date: Date | string): string {
   const now = new Date();
-  const diff = now.getTime() - date.getTime();
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  const diff = now.getTime() - dateObj.getTime();
   const hours = Math.floor(diff / (1000 * 60 * 60));
   
   if (hours < 1) return 'Just now';
@@ -26,7 +27,7 @@ function formatTimeAgo(date: Date): string {
   const days = Math.floor(hours / 24);
   if (days === 1) return 'Yesterday';
   if (days < 7) return `${days} days ago`;
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  return dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
 function getSignalTypeLabel(type: string): string {
