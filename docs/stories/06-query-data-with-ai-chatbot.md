@@ -20,5 +20,4 @@
 * This feature is marked as "if feasible" - may be a future enhancement
 * Chatbot queries the underlying graph database directly
 * Should support questions about timing, clients, events, and relationships
-* Page 2 additions: "AI chatbot for queries in multiple languages"
-* Multilingual support is important for RM adoption across regions
+
