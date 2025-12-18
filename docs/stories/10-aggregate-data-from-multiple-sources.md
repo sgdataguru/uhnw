@@ -5,13 +5,22 @@
 **so that** I have a comprehensive view of liquidity events rather than relying on a single dataset.
 
 ## Acceptance Criteria
+### Data Ingestion & Integration
+* Multi-Source Ingestion: The system successfully ingests and * * parses structured and semi-structured data from:
+* Private equity databases (e.g., PrivateCircle)
+* Company registration and compliance platforms (e.g., Zauba Corp)
+* Promoter profiles and mandatory public domain disclosures.
+* IPO filings and market intelligence from primary exchanges (e.g., NSE or BSE).
 
-* System ingests data from private company databases (e.g., PrivateCircle)
-* System ingests promoter information and public domain disclosures
-* System ingests IPO-related data from exchanges and market intelligence
-* System ingests data from platforms like Zauba
-* Data sources are clearly attributed when displaying signals
-* Conflicting data from different sources is handled appropriately
+Automation: Data pipelines must automatically update at a predefined frequency (e.g., every 15 min) without manual intervention.
+
+### Data Integrity & Provenance
+* Source Attribution: Every data point or generated signal must display a "Source Trace" linking it back to its specific origin (e.g., "Source: Zauba Corp, 2025-10-15").
+* Conflict Resolution Logic: The system must implement a tiered hierarchy to resolve data discrepancies (e.g., prioritize regulatory filings over third-party intelligence).
+* Audit Logging: All ingestion failures or data conflicts must be flagged in an administrative dashboard for review.
+### Functional Performance
+* Searchability: Ingested data must be indexed and searchable within < X seconds of the ingestion cycle completion.
+* Normalization: Data from disparate sources (PrivateCircle vs. Zauba) must be mapped to a unified schema (e.g., consistent naming conventions for "Director" or "Promoter").
 
 ## Notes
 

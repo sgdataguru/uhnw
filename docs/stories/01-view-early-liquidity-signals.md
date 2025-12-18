@@ -11,9 +11,14 @@
 * Signals are sorted by recency and relevance
 * Signal details include the affected client/prospect and signal type
 * Signals are updated in near real-time as new data is ingested
+* Signals categorized by timeline: 30-day, 60-day, 90-day triggers
+* Filter by signal urgency/timeline window
+* Focus on 100CR+ UHNW individuals (TAM of ~4,400 people)
 
 ## Notes
 
 * Liquidity signals can come from multiple systems: margin-related changes, corporate actions, acquisitions, or early exit indicators
 * The key value is timing - detecting changes early provides competitive advantage
 * Data sources include PrivateCircle, Zauba, IPO-related data, exchange and market intelligence sources
+* Page 1 highlights: "Liquidity event signals (30-90 day triggers)"
+* Meeting discussion: "If some liquidity event is happening we are not reaching there on time"

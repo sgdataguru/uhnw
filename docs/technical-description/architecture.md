@@ -2,8 +2,9 @@
 
 ## Technical Architecture Document
 
-**Version:** 1.0.0  
+**Version:** 2.0.0  
 **Created:** 2025-12-17  
+**Updated:** 2025-12-19  
 **Status:** Draft
 
 ---
@@ -12,7 +13,13 @@
 
 ### Purpose
 
-A web application designed for Relationship Managers (RMs) handling Ultra High Net Worth (UHNW) clients. The platform helps identify early liquidity signals before they become obvious in the market, enabling proactive client engagement and first-mover advantage.
+A web application designed exclusively for **Relationship Managers (RMs)** handling Ultra High Net Worth (UHNW) clients (₹100Cr+ wealth). The platform helps identify early liquidity signals 30-90 days before they become obvious in the market, enabling proactive client engagement and first-mover advantage.
+
+### Target Market
+
+- **Organization:** Nuvama Wealth (30-35 RMs)
+- **Total Addressable Market:** ~4,400 UHNW individuals in India
+- **Client Threshold:** ₹100 Crore+ estimated wealth
 
 ### Architecture Pattern
 
@@ -20,137 +27,256 @@ Next.js 15 App Router with Server-First Architecture, leveraging Server Componen
 
 ### Key Capabilities
 
-- 🔍 **Early Signal Detection** - Aggregate liquidity signals from multiple data sources
-- 📊 **Lead Scoring** - Explainable scoring based on signal strength and relevance
-- 🔗 **Relationship Mapping** - Graph-based visualization of entity relationships
-- 🤖 **AI Chatbot** - Natural language queries against the intelligence database
-- 📈 **Activity Tracking** - Dashboard metrics for leads and follow-ups
+| Category | Capabilities |
+|----------|-------------|
+| **Signal Detection** | Early liquidity signals (IPO, M&A, Funding), 30-90 day advance detection, multi-source aggregation |
+| **Client Intelligence** | Lead scoring with explainability, wallet share analysis, cross-sell opportunities |
+| **Relationship Mapping** | Graph-based entity visualization, warm intro path discovery, influencer network mapping |
+| **AI Assistant** | Multilingual chatbot (English, Hindi, Marathi), natural language queries, trend analysis |
+| **Productivity** | Fireflies.ai meeting integration, voice notes with auto-transcription, automated follow-up creation |
+| **Risk Management** | Portfolio concentration alerts, client retention monitoring, churn prediction |
 
 ---
 
-## 2. Technology Stack
+## 2. User Stories Coverage
+
+### Core Intelligence (Stories 1-10)
+
+| Story | Feature | Priority |
+|-------|---------|----------|
+| 1 | Early Liquidity Signals (30-90 days) | P0 |
+| 2 | Lead Scores with Explainability | P0 |
+| 3 | Filter Prospects by Criteria | P0 |
+| 4 | View Top Prospects with Actions | P0 |
+| 5 | Prospect Detail Panel | P0 |
+| 6 | AI Chatbot (Multilingual) | P0 |
+| 7 | Track Leads and Follow-ups | P0 |
+| 8 | Relationship Graph Visualization | P1 |
+| 9 | Proactive Engagement Suggestions | P1 |
+| 10 | Aggregate Data from Multiple Sources | P0 |
+
+### Growth & Revenue (Stories 11-17)
+
+| Story | Feature | Priority |
+|-------|---------|----------|
+| 11 | Add Liquidity Events Manually | P1 |
+| 12 | Client-Specific News Alerts | P1 |
+| 13 | Firm-Wide AUM Dashboard | P2 |
+| 14 | Wallet Share Analysis | P1 |
+| 15 | Revenue Growth by Product Mix | P2 |
+| 16 | Alternate Investment Penetration | P2 |
+| 17 | Credit & Capital Solutions | P1 |
+
+### Analytics & Insights (Stories 18-20)
+
+| Story | Feature | Priority |
+|-------|---------|----------|
+| 18 | Conversion/Churn Metrics | P2 |
+| 19 | AI-Driven Trend Insights | P1 |
+| 20 | Influencer Network Mapping | P2 |
+
+### Productivity & Risk (Stories 21-25)
+
+| Story | Feature | Priority |
+|-------|---------|----------|
+| 21 | Fireflies.ai → OneDrive → Follow-ups | P1 |
+| 22 | Client Retention Metrics | P1 |
+| 23 | RM Productivity Scorecard | P2 |
+| 24 | Risk Concentration Alerts | P1 |
+| 25 | Cross-Sell Opportunity Tracker | P1 |
+
+---
+
+## 3. Technology Stack
 
 | Layer | Technology | Rationale |
 |-------|------------|-----------|
 | **Framework** | Next.js 15 | Server components, App Router, built-in API routes, streaming |
 | **Language** | TypeScript 5.x | Type safety, better developer experience, reduced runtime errors |
-| **Styling** | Tailwind CSS 3.x | Utility-first, design system support, premium aesthetic |
-| **UI Components** | Radix UI + Custom | Accessible primitives with Nuvama-inspired styling |
+| **Styling** | Tailwind CSS 3.x | Utility-first, design system support, Nuvama Wealth aesthetic |
+| **UI Components** | Radix UI + Custom | Accessible primitives with premium styling |
 | **Database** | Supabase (PostgreSQL) | Real-time subscriptions, auth, row-level security |
-| **Graph Database** | Neo4j Aura | Relationship mapping between entities, liquidity events |
+| **Graph Database** | Neo4j Aura | Relationship mapping between entities, liquidity events, intro paths |
 | **State Management** | Server Components + Zustand | Minimal client state, server-first data fetching |
 | **Authentication** | Supabase Auth | Built-in, secure, role-based access |
-| **AI/LLM** | OpenAI GPT-4 / Vercel AI SDK | Chatbot, lead score explanations |
-| **Data Ingestion** | Node.js Workers | ETL from PrivateCircle, Zauba, IPO data sources |
+| **AI/LLM** | OpenAI GPT-4 / Vercel AI SDK | Chatbot, lead score explanations, trend analysis |
+| **Speech-to-Text** | OpenAI Whisper / Azure Speech | Voice note transcription (multilingual) |
+| **Meeting Integration** | Fireflies.ai API + OneDrive | Auto-capture meeting transcripts, extract follow-ups |
+| **News/Data** | NewsAPI, PrivateCircle, Zauba | Real-time client mentions, company data |
 | **Charts** | Recharts / Tremor | Data visualization for metrics and graphs |
 | **Forms** | React Hook Form + Zod | Type-safe form validation |
 
 ---
 
-## 3. System Architecture Diagram
+## 4. System Architecture Diagram
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                           CLIENT LAYER                                   │
-│  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │                    Next.js App (Browser)                         │   │
-│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────────────┐ │   │
-│  │  │Dashboard │  │Prospects │  │ Signals  │  │    AI Chatbot    │ │   │
-│  │  │   Page   │  │   Page   │  │   Page   │  │   (Floating)     │ │   │
-│  │  └──────────┘  └──────────┘  └──────────┘  └──────────────────┘ │   │
-│  └─────────────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│                           SERVER LAYER                                   │
-│  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │                   Next.js API Routes                             │   │
-│  │  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌───────────┐  │   │
-│  │  │/api/       │  │/api/       │  │/api/       │  │/api/      │  │   │
-│  │  │prospects   │  │signals     │  │chat        │  │metrics    │  │   │
-│  │  └────────────┘  └────────────┘  └────────────┘  └───────────┘  │   │
-│  └─────────────────────────────────────────────────────────────────┘   │
-│  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │                   Service Layer                                  │   │
-│  │  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌───────────┐  │   │
-│  │  │ Prospect   │  │  Signal    │  │   Chat     │  │  Graph    │  │   │
-│  │  │  Service   │  │  Service   │  │  Service   │  │  Service  │  │   │
-│  │  └────────────┘  └────────────┘  └────────────┘  └───────────┘  │   │
-│  └─────────────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│                           DATA LAYER                                     │
-│  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────────┐  │
-│  │    Supabase      │  │     Neo4j        │  │     OpenAI API       │  │
-│  │   (PostgreSQL)   │  │  (Graph DB)      │  │     (LLM)            │  │
-│  │                  │  │                  │  │                      │  │
-│  │ • Users          │  │ • Persons        │  │ • Chat completions   │  │
-│  │ • Prospects      │  │ • Companies      │  │ • Lead explanations  │  │
-│  │ • Signals        │  │ • Sectors        │  │                      │  │
-│  │ • Activities     │  │ • Events         │  │                      │  │
-│  │ • Lead Scores    │  │ • Relationships  │  │                      │  │
-│  └──────────────────┘  └──────────────────┘  └──────────────────────┘  │
-└─────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│                      EXTERNAL DATA SOURCES                               │
-│  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌────────────────────┐│
-│  │PrivateCircle│  │   Zauba   │  │  IPO Data  │  │ Market Intelligence││
-│  │  (VC/PE)    │  │ (Company) │  │ (Exchange) │  │    (Promoters)     ││
-│  └────────────┘  └────────────┘  └────────────┘  └────────────────────┘│
-└─────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              CLIENT LAYER                                    │
+│  ┌───────────────────────────────────────────────────────────────────────┐  │
+│  │                      Next.js App (Browser)                             │  │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌─────────────┐ │  │
+│  │  │Dashboard │ │ Clients  │ │ Signals  │ │Analytics │ │  AI Chatbot │ │  │
+│  │  │  (Home)  │ │   List   │ │   Feed   │ │  Views   │ │ (Floating)  │ │  │
+│  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘ └─────────────┘ │  │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌─────────────┐ │  │
+│  │  │ Client   │ │ Wallet   │ │Cross-Sell│ │  Risk    │ │Voice Notes  │ │  │
+│  │  │ Detail   │ │  Share   │ │   Opps   │ │ Alerts   │ │ & Memos     │ │  │
+│  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘ └─────────────┘ │  │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌─────────────┐ │  │
+│  │  │ Network  │ │  News    │ │  Credit  │ │ Health   │ │   My Perf   │ │  │
+│  │  │   Map    │ │   Feed   │ │   Opps   │ │ Monitor  │ │ Dashboard   │ │  │
+│  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘ └─────────────┘ │  │
+│  └───────────────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              SERVER LAYER                                    │
+│  ┌───────────────────────────────────────────────────────────────────────┐  │
+│  │                       Next.js API Routes                               │  │
+│  │  ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────────────┐  │  │
+│  │  │/api/       │ │/api/       │ │/api/       │ │/api/               │  │  │
+│  │  │clients     │ │signals     │ │chat        │ │metrics             │  │  │
+│  │  └────────────┘ └────────────┘ └────────────┘ └────────────────────┘  │  │
+│  │  ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────────────┐  │  │
+│  │  │/api/       │ │/api/       │ │/api/       │ │/api/               │  │  │
+│  │  │wallet-share│ │cross-sell  │ │voice-notes │ │fireflies-webhook   │  │  │
+│  │  └────────────┘ └────────────┘ └────────────┘ └────────────────────┘  │  │
+│  │  ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────────────┐  │  │
+│  │  │/api/       │ │/api/       │ │/api/       │ │/api/               │  │  │
+│  │  │news        │ │graph       │ │risk-alerts │ │intelligence        │  │  │
+│  │  └────────────┘ └────────────┘ └────────────┘ └────────────────────┘  │  │
+│  └───────────────────────────────────────────────────────────────────────┘  │
+│  ┌───────────────────────────────────────────────────────────────────────┐  │
+│  │                         Service Layer                                  │  │
+│  │  ┌───────────┐ ┌───────────┐ ┌───────────┐ ┌───────────┐ ┌─────────┐ │  │
+│  │  │ Client    │ │ Signal    │ │   Chat    │ │  Graph    │ │ News    │ │  │
+│  │  │ Service   │ │ Service   │ │  Service  │ │ Service   │ │ Service │ │  │
+│  │  └───────────┘ └───────────┘ └───────────┘ └───────────┘ └─────────┘ │  │
+│  │  ┌───────────┐ ┌───────────┐ ┌───────────┐ ┌───────────┐ ┌─────────┐ │  │
+│  │  │ Wallet    │ │Cross-Sell │ │   Risk    │ │  Voice    │ │Fireflies│ │  │
+│  │  │ Service   │ │  Service  │ │  Service  │ │ Service   │ │ Service │ │  │
+│  │  └───────────┘ └───────────┘ └───────────┘ └───────────┘ └─────────┘ │  │
+│  └───────────────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              DATA LAYER                                      │
+│  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐  ┌───────────┐  │
+│  │   Supabase     │  │     Neo4j      │  │   OpenAI API   │  │ OneDrive  │  │
+│  │  (PostgreSQL)  │  │   (Graph DB)   │  │     (LLM)      │  │  (Files)  │  │
+│  │                │  │                │  │                │  │           │  │
+│  │ • Users/RMs    │  │ • Persons      │  │ • Chat         │  │ • Meeting │  │
+│  │ • Clients      │  │ • Companies    │  │ • Transcribe   │  │   Notes   │  │
+│  │ • Signals      │  │ • Networks     │  │ • Analyze      │  │ • Voice   │  │
+│  │ • Activities   │  │ • Intro Paths  │  │ • Explain      │  │   Memos   │  │
+│  │ • Follow-ups   │  │ • Influence    │  │ • Extract      │  │           │  │
+│  │ • Voice Notes  │  │ • Events       │  │   Action Items │  │           │  │
+│  │ • Wallet Data  │  │ • Referrals    │  │                │  │           │  │
+│  │ • Risk Alerts  │  │                │  │                │  │           │  │
+│  └────────────────┘  └────────────────┘  └────────────────┘  └───────────┘  │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        EXTERNAL INTEGRATIONS                                 │
+│  ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌───────────┐  │
+│  │PrivateCircle│ │   Zauba   │ │  IPO Data  │ │ NewsAPI /  │ │Fireflies  │  │
+│  │  (VC/PE)    │ │ (MCA/ROC) │ │ (Exchange) │ │ RSS Feeds  │ │   .ai     │  │
+│  └────────────┘ └────────────┘ └────────────┘ └────────────┘ └───────────┘  │
+│  ┌────────────┐ ┌────────────┐ ┌────────────────────────────────────────┐   │
+│  │ Microsoft  │ │   Azure    │ │              Meeting Platforms         │   │
+│  │   Graph    │ │  Speech    │ │    Zoom  |  Google Meet  |  Teams      │   │
+│  │ (OneDrive) │ │ (Whisper)  │ │                                        │   │
+│  └────────────┘ └────────────┘ └────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 4. Project Folder Structure
+## 5. Project Folder Structure
 
 ```
 uhnw/
 ├── app/                              # Next.js App Router
 │   ├── (auth)/                       # Auth route group (public)
-│   │   ├── login/
-│   │   │   └── page.tsx
-│   │   ├── forgot-password/
-│   │   │   └── page.tsx
+│   │   ├── login/page.tsx
+│   │   ├── forgot-password/page.tsx
 │   │   └── layout.tsx
 │   │
 │   ├── (dashboard)/                  # Main app route group (protected)
-│   │   ├── page.tsx                  # Dashboard home
-│   │   ├── prospects/
-│   │   │   ├── page.tsx              # Prospects list with filters
-│   │   │   └── [id]/
-│   │   │       └── page.tsx          # Prospect detail view
-│   │   ├── signals/
-│   │   │   └── page.tsx              # Liquidity signals feed
-│   │   ├── graph/
-│   │   │   └── page.tsx              # Relationship graph explorer
-│   │   ├── analytics/
-│   │   │   └── page.tsx              # Metrics dashboard
+│   │   ├── page.tsx                  # RM Dashboard (Home)
+│   │   │
+│   │   ├── clients/                  # My Clients
+│   │   │   ├── page.tsx              # Client list with filters
+│   │   │   └── [id]/page.tsx         # Client detail view
+│   │   │
+│   │   ├── signals/page.tsx          # My Active Signals
+│   │   ├── news/page.tsx             # My Client News Feed
+│   │   │
+│   │   ├── wallet-share/page.tsx     # Wallet Share Analysis
+│   │   ├── cross-sell/page.tsx       # Cross-Sell Opportunities
+│   │   ├── credit/page.tsx           # Credit Opportunities
+│   │   │
+│   │   ├── network/page.tsx          # My Network Map
+│   │   ├── insights/page.tsx         # AI Trend Insights
+│   │   │
+│   │   ├── risk/page.tsx             # Portfolio Risk Alerts
+│   │   ├── health/page.tsx           # Client Health Monitor
+│   │   │
+│   │   ├── voice-notes/page.tsx      # Voice Notes & Memos
+│   │   ├── performance/page.tsx      # My Performance Dashboard
+│   │   │
 │   │   └── layout.tsx                # Dashboard shell layout
 │   │
 │   ├── api/                          # API routes
-│   │   ├── prospects/
+│   │   ├── clients/
 │   │   │   ├── route.ts              # GET (list), POST (create)
-│   │   │   └── [id]/
-│   │   │       └── route.ts          # GET, PATCH, DELETE
+│   │   │   └── [id]/route.ts         # GET, PATCH, DELETE
+│   │   │
 │   │   ├── signals/
 │   │   │   ├── route.ts              # GET signals
-│   │   │   └── recent/
-│   │   │       └── route.ts          # GET recent signals
-│   │   ├── chat/
-│   │   │   └── route.ts              # POST chat message (streaming)
+│   │   │   └── recent/route.ts       # GET recent signals
+│   │   │
+│   │   ├── chat/route.ts             # POST chat message (streaming)
+│   │   │
 │   │   ├── graph/
-│   │   │   └── route.ts              # GET graph data
+│   │   │   ├── route.ts              # GET full graph
+│   │   │   └── intro-paths/route.ts  # GET warm intro paths
+│   │   │
+│   │   ├── wallet-share/
+│   │   │   ├── route.ts              # GET wallet analysis
+│   │   │   └── [clientId]/route.ts   # GET client wallet share
+│   │   │
+│   │   ├── cross-sell/route.ts       # GET cross-sell opportunities
+│   │   ├── credit/route.ts           # GET credit opportunities
+│   │   │
+│   │   ├── news/route.ts             # GET client news
+│   │   ├── insights/route.ts         # GET AI trend insights
+│   │   │
+│   │   ├── risk-alerts/route.ts      # GET risk alerts
+│   │   ├── client-health/route.ts    # GET client health metrics
+│   │   │
+│   │   ├── voice-notes/
+│   │   │   ├── route.ts              # GET, POST voice notes
+│   │   │   └── transcribe/route.ts   # POST transcription
+│   │   │
+│   │   ├── intelligence/route.ts     # POST manual intelligence
+│   │   │
+│   │   ├── follow-ups/
+│   │   │   ├── route.ts              # GET, POST follow-ups
+│   │   │   └── [id]/route.ts         # PATCH, DELETE
+│   │   │
+│   │   ├── fireflies/
+│   │   │   └── webhook/route.ts      # POST webhook from Fireflies
+│   │   │
 │   │   ├── metrics/
-│   │   │   └── route.ts              # GET dashboard metrics
-│   │   └── auth/
-│   │       └── callback/
-│   │           └── route.ts          # Supabase auth callback
+│   │   │   ├── route.ts              # GET dashboard metrics
+│   │   │   └── performance/route.ts  # GET RM performance
+│   │   │
+│   │   └── auth/callback/route.ts    # Supabase auth callback
 │   │
 │   ├── layout.tsx                    # Root layout
 │   ├── globals.css                   # Global styles + CSS variables
@@ -169,7 +295,9 @@ uhnw/
 │   │   ├── Dialog.tsx
 │   │   ├── Dropdown.tsx
 │   │   ├── Tooltip.tsx
-│   │   └── index.ts                  # Barrel export
+│   │   ├── LeadScore.tsx
+│   │   ├── SignalBadge.tsx
+│   │   └── index.ts
 │   │
 │   ├── layout/                       # Layout components
 │   │   ├── Header.tsx
@@ -179,126 +307,198 @@ uhnw/
 │   │   └── PageHeader.tsx
 │   │
 │   └── features/                     # Feature-specific components
-│       ├── prospects/
-│       │   ├── ProspectCard.tsx
-│       │   ├── ProspectList.tsx
-│       │   ├── ProspectDetail.tsx
-│       │   └── ProspectFilters.tsx
+│       ├── clients/
+│       │   ├── ClientCard.tsx
+│       │   ├── ClientList.tsx
+│       │   ├── ClientDetail.tsx
+│       │   ├── ClientFilters.tsx
+│       │   └── WalletShareCard.tsx
+│       │
 │       ├── signals/
 │       │   ├── SignalCard.tsx
 │       │   ├── SignalList.tsx
 │       │   ├── SignalTimeline.tsx
-│       │   └── SignalBadge.tsx
+│       │   └── AddIntelligenceModal.tsx
+│       │
 │       ├── lead-score/
 │       │   ├── LeadScoreCard.tsx
 │       │   ├── LeadScoreExplanation.tsx
 │       │   └── ScoreIndicator.tsx
+│       │
 │       ├── graph/
-│       │   ├── RelationshipGraph.tsx
+│       │   ├── NetworkMap.tsx
 │       │   ├── GraphNode.tsx
+│       │   ├── IntroPathCard.tsx
 │       │   └── GraphControls.tsx
+│       │
 │       ├── chat/
-│       │   ├── ChatBot.tsx
+│       │   ├── AIChatbot.tsx
 │       │   ├── ChatInput.tsx
 │       │   ├── ChatMessage.tsx
+│       │   ├── LanguageSelector.tsx
 │       │   └── ChatSuggestions.tsx
+│       │
 │       ├── dashboard/
 │       │   ├── MetricsCard.tsx
 │       │   ├── ActivityFeed.tsx
 │       │   ├── QuickActions.tsx
-│       │   └── TopProspects.tsx
-│       └── filters/
-│           ├── FilterPanel.tsx
-│           ├── CityFilter.tsx
-│           ├── SectorFilter.tsx
-│           └── NetworkFilter.tsx
+│       │   ├── TopClients.tsx
+│       │   └── ActiveSignals.tsx
+│       │
+│       ├── wallet/
+│       │   ├── WalletShareAnalysis.tsx
+│       │   ├── OpportunityList.tsx
+│       │   └── SegmentTable.tsx
+│       │
+│       ├── cross-sell/
+│       │   ├── CrossSellOpportunities.tsx
+│       │   ├── ProductMixChart.tsx
+│       │   └── RecommendationCard.tsx
+│       │
+│       ├── credit/
+│       │   ├── CreditOpportunities.tsx
+│       │   └── CreditCard.tsx
+│       │
+│       ├── news/
+│       │   ├── NewsFeed.tsx
+│       │   └── NewsCard.tsx
+│       │
+│       ├── insights/
+│       │   ├── AIInsights.tsx
+│       │   ├── TrendChart.tsx
+│       │   └── PatternCard.tsx
+│       │
+│       ├── risk/
+│       │   ├── RiskAlerts.tsx
+│       │   ├── ConcentrationCard.tsx
+│       │   └── AlertCard.tsx
+│       │
+│       ├── health/
+│       │   ├── ClientHealthMonitor.tsx
+│       │   ├── AtRiskClients.tsx
+│       │   └── RetentionMetrics.tsx
+│       │
+│       ├── voice-notes/
+│       │   ├── VoiceRecorder.tsx
+│       │   ├── VoiceNotesList.tsx
+│       │   ├── TranscriptionView.tsx
+│       │   └── LanguageSelector.tsx
+│       │
+│       ├── follow-ups/
+│       │   ├── FollowUpList.tsx
+│       │   ├── FollowUpCard.tsx
+│       │   └── CreateFollowUpModal.tsx
+│       │
+│       └── performance/
+│           ├── PerformanceDashboard.tsx
+│           ├── ActivityMetrics.tsx
+│           ├── TargetProgress.tsx
+│           └── TaskList.tsx
 │
 ├── hooks/                            # Custom React hooks
-│   ├── useProspects.ts
+│   ├── useClients.ts
 │   ├── useSignals.ts
 │   ├── useChat.ts
 │   ├── useGraph.ts
+│   ├── useWalletShare.ts
+│   ├── useCrossSell.ts
+│   ├── useNews.ts
+│   ├── useRiskAlerts.ts
+│   ├── useVoiceNotes.ts
+│   ├── useFollowUps.ts
 │   ├── useMetrics.ts
 │   ├── useFilters.ts
 │   └── useDebounce.ts
 │
 ├── lib/                              # Utilities and configurations
-│   ├── utils.ts                      # General utilities
-│   ├── cn.ts                         # Class name helper (clsx + twMerge)
+│   ├── utils.ts
+│   ├── cn.ts
 │   ├── supabase/
-│   │   ├── client.ts                 # Browser client
-│   │   ├── server.ts                 # Server client
-│   │   └── middleware.ts             # Auth middleware
+│   │   ├── client.ts
+│   │   ├── server.ts
+│   │   └── middleware.ts
 │   ├── neo4j/
-│   │   ├── client.ts                 # Neo4j driver
-│   │   └── queries.ts                # Cypher query templates
+│   │   ├── client.ts
+│   │   └── queries.ts
 │   ├── openai/
-│   │   └── client.ts                 # OpenAI client config
+│   │   ├── client.ts
+│   │   └── prompts.ts
+│   ├── fireflies/
+│   │   ├── client.ts
+│   │   └── parser.ts
+│   ├── onedrive/
+│   │   └── client.ts
 │   └── validators/
-│       ├── prospect.ts               # Zod schemas
-│       └── signal.ts
+│       ├── client.ts
+│       ├── signal.ts
+│       └── follow-up.ts
 │
 ├── services/                         # Business logic layer
-│   ├── prospectService.ts
+│   ├── clientService.ts
 │   ├── signalService.ts
 │   ├── chatService.ts
 │   ├── graphService.ts
+│   ├── walletShareService.ts
+│   ├── crossSellService.ts
+│   ├── creditService.ts
+│   ├── newsService.ts
+│   ├── riskAlertService.ts
+│   ├── voiceNoteService.ts
+│   ├── firefliesService.ts
+│   ├── followUpService.ts
 │   ├── metricsService.ts
 │   └── leadScoringService.ts
 │
 ├── types/                            # TypeScript definitions
-│   ├── prospect.ts
+│   ├── client.ts
 │   ├── signal.ts
 │   ├── graph.ts
 │   ├── chat.ts
+│   ├── wallet.ts
+│   ├── cross-sell.ts
+│   ├── news.ts
+│   ├── risk.ts
+│   ├── voice-note.ts
+│   ├── follow-up.ts
 │   ├── metrics.ts
 │   ├── api.ts
-│   └── index.ts                      # Barrel export
+│   └── index.ts
 │
 ├── constants/                        # Application constants
 │   ├── index.ts
 │   ├── signalTypes.ts
 │   ├── sectors.ts
-│   └── cities.ts
+│   ├── cities.ts
+│   ├── products.ts
+│   └── riskThresholds.ts
 │
-├── styles/                           # Additional styles
-│   └── design-tokens.css             # CSS custom properties
+├── styles/
+│   └── design-tokens.css
 │
-├── docs/                             # Documentation
-│   ├── stories/                      # User stories
-│   └── technical-description/        # Technical specs
+├── docs/
+│   ├── stories/
+│   ├── wireframes/
+│   └── technical-description/
 │
-├── public/                           # Static assets
-│   ├── logo.svg
-│   ├── favicon.ico
-│   └── images/
-│
-├── .github/
-│   ├── instructions/                 # AI coding guidelines
-│   └── prompts/                      # Reusable prompts
-│
-├── .env.local                        # Environment variables (git ignored)
-├── .env.example                      # Environment template
-├── next.config.ts                    # Next.js configuration
-├── tailwind.config.ts                # Tailwind configuration
-├── tsconfig.json                     # TypeScript configuration
-└── package.json
+└── public/
+    ├── logo.svg
+    ├── favicon.ico
+    └── images/
 ```
 
 ---
 
-## 5. Data Models
+## 6. Data Models
 
-### 5.1 Core Types
+### 6.1 Core Types
 
 ```typescript
-// types/prospect.ts
+// types/client.ts
 
 /**
- * Represents a prospect/potential client in the system
- * @interface Prospect
+ * Represents an RM's client/prospect
  */
-export interface Prospect {
+export interface Client {
   id: string;
   name: string;
   email?: string;
@@ -308,17 +508,37 @@ export interface Prospect {
   sector: Sector;
   city: string;
   network?: string;
-  cluster?: string;
+  
+  // Wealth & Wallet
+  estimatedWealth: number;          // Total estimated wealth
+  rmWalletShare: number;            // RM's current share
+  walletSharePercent: number;       // Percentage held
+  opportunityGap: number;           // Potential additional capture
+  
+  // Products
+  productsHeld: Product[];
+  productsMissing: Product[];
+  
+  // Lead Score
   leadScore: number;
   leadScoreExplanation: LeadScoreExplanation;
-  status: ProspectStatus;
-  assignedRmId?: string;
+  
+  // Status
+  status: ClientStatus;
+  riskScore: number;                // Churn risk (0-100)
+  healthStatus: 'healthy' | 'at-risk' | 'critical';
+  
+  // RM Assignment
+  assignedRmId: string;
   lastContactedAt?: Date;
+  nextFollowUpAt?: Date;
+  
+  // Timestamps
   createdAt: Date;
   updatedAt: Date;
 }
 
-export type ProspectStatus = 
+export type ClientStatus = 
   | 'new' 
   | 'contacted' 
   | 'engaged' 
@@ -326,9 +546,19 @@ export type ProspectStatus =
   | 'converted' 
   | 'inactive';
 
+export type Product = 
+  | 'wealth_management'
+  | 'broking'
+  | 'pms'
+  | 'alternates'
+  | 'credit_line'
+  | 'insurance'
+  | 'family_office';
+
 export interface LeadScoreExplanation {
   score: number;
   factors: LeadScoreFactor[];
+  recommendation: string;        // e.g., "Act within 48hrs"
   generatedAt: Date;
 }
 
@@ -336,6 +566,7 @@ export interface LeadScoreFactor {
   signal: string;
   weight: number;
   description: string;
+  source: DataSource;
 }
 ```
 
@@ -344,7 +575,6 @@ export interface LeadScoreFactor {
 
 /**
  * Represents a liquidity signal event
- * @interface Signal
  */
 export interface Signal {
   id: string;
@@ -354,24 +584,37 @@ export interface Signal {
   title: string;
   description: string;
   metadata: Record<string, unknown>;
-  prospectId?: string;
-  companyId?: string;
+  
+  // Timing
+  expectedTimeline: '30_days' | '30_60_days' | '60_90_days' | '3_6_months' | '6_plus_months';
   detectedAt: Date;
   expiresAt?: Date;
+  
+  // Associations
+  clientId?: string;
+  companyId?: string;
+  
+  // RM Actions
   isRead: boolean;
   isActioned: boolean;
+  actionedAt?: Date;
+  actionNotes?: string;
+  
   createdAt: Date;
 }
 
 export type SignalType =
+  | 'ipo_filing'
+  | 'acquisition'
+  | 'funding_round'
+  | 'secondary_sale'
+  | 'promoter_activity'
+  | 'board_change'
+  | 'regulatory_disclosure'
+  | 'stake_sale'
   | 'margin_change'
   | 'corporate_action'
-  | 'acquisition'
-  | 'early_exit'
-  | 'ipo_filing'
-  | 'funding_round'
-  | 'promoter_activity'
-  | 'regulatory_disclosure';
+  | 'manual_intelligence';       // RM-added
 
 export type DataSource =
   | 'private_circle'
@@ -379,157 +622,211 @@ export type DataSource =
   | 'exchange_data'
   | 'market_intelligence'
   | 'public_disclosure'
-  | 'internal';
+  | 'news_api'
+  | 'rm_input'
+  | 'fireflies';
 
 export type SignalSeverity = 'low' | 'medium' | 'high' | 'critical';
 ```
 
 ```typescript
-// types/graph.ts
+// types/wallet.ts
 
 /**
- * Graph node representing an entity
- * @interface GraphNode
+ * Wallet share analysis for a client
  */
-export interface GraphNode {
-  id: string;
-  type: NodeType;
-  label: string;
-  properties: Record<string, unknown>;
+export interface WalletShareAnalysis {
+  clientId: string;
+  estimatedTotalWealth: number;
+  currentShare: number;
+  sharePercent: number;
+  opportunityGap: number;
+  realisticCapturePercent: number;
+  
+  // Products breakdown
+  productBreakdown: ProductShare[];
+  missingProducts: Product[];
+  
+  // Recommendations
+  topOpportunities: WalletOpportunity[];
 }
 
-export type NodeType = 
-  | 'person' 
-  | 'company' 
-  | 'sector' 
-  | 'event' 
-  | 'fund';
-
-/**
- * Graph edge representing a relationship
- * @interface GraphEdge
- */
-export interface GraphEdge {
-  id: string;
-  source: string;
-  target: string;
-  type: RelationType;
-  properties?: Record<string, unknown>;
+export interface ProductShare {
+  product: Product;
+  amount: number;
+  percent: number;
 }
 
-export type RelationType =
-  | 'promoter_of'
-  | 'investor_in'
-  | 'director_of'
-  | 'works_at'
-  | 'belongs_to_sector'
-  | 'triggered_by';
-
-export interface GraphData {
-  nodes: GraphNode[];
-  edges: GraphEdge[];
+export interface WalletOpportunity {
+  product: Product;
+  estimatedRevenue: number;
+  trigger: string;              // e.g., "IPO filing"
+  timing: string;               // e.g., "Within 30 days"
+  priority: 'high' | 'medium' | 'low';
 }
 ```
 
 ```typescript
-// types/chat.ts
+// types/voice-note.ts
 
 /**
- * Chat message in the AI chatbot
- * @interface ChatMessage
+ * Voice note with auto-transcription
  */
-export interface ChatMessage {
+export interface VoiceNote {
   id: string;
-  role: 'user' | 'assistant' | 'system';
-  content: string;
-  timestamp: Date;
-  metadata?: {
-    sources?: string[];
-    confidence?: number;
-  };
-}
-
-export interface ChatSession {
-  id: string;
-  userId: string;
-  messages: ChatMessage[];
+  rmId: string;
+  
+  // Audio
+  audioUrl: string;
+  duration: number;             // seconds
+  language: 'en' | 'hi' | 'mr';
+  
+  // Transcription
+  transcript: string;
+  transcriptStatus: 'pending' | 'processing' | 'completed' | 'failed';
+  
+  // Auto-linking
+  linkedClientIds: string[];    // Auto-detected from transcript
+  detectedTopics: string[];     // e.g., ['IPO', 'PMS', 'family office']
+  
+  // Metadata
+  title?: string;
+  source: 'app_recording' | 'fireflies' | 'upload';
+  
   createdAt: Date;
   updatedAt: Date;
 }
 ```
 
 ```typescript
-// types/metrics.ts
+// types/follow-up.ts
 
 /**
- * Dashboard metrics for RM activity tracking
- * @interface DashboardMetrics
+ * Follow-up task for RM
  */
-export interface DashboardMetrics {
-  totalLeads: number;
-  newLeadsToday: number;
-  signalsDetected: number;
-  signalsActioned: number;
-  followUpsPending: number;
-  conversionRate: number;
-  periodComparison: MetricComparison;
+export interface FollowUp {
+  id: string;
+  rmId: string;
+  clientId: string;
+  
+  // Task details
+  title: string;
+  description?: string;
+  type: FollowUpType;
+  priority: 'high' | 'medium' | 'low';
+  
+  // Timing
+  dueDate: Date;
+  reminderAt?: Date;
+  
+  // Source
+  source: FollowUpSource;
+  sourceId?: string;            // Voice note ID, Fireflies meeting ID, etc.
+  sourceContext?: string;       // Relevant transcript snippet
+  
+  // Status
+  status: 'pending' | 'completed' | 'snoozed' | 'cancelled';
+  completedAt?: Date;
+  
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-export interface MetricComparison {
-  period: 'day' | 'week' | 'month';
-  previousValue: number;
-  currentValue: number;
-  changePercent: number;
-  trend: 'up' | 'down' | 'stable';
-}
+export type FollowUpType = 
+  | 'call'
+  | 'email'
+  | 'meeting'
+  | 'send_document'
+  | 'proposal'
+  | 'other';
+
+export type FollowUpSource = 
+  | 'manual'
+  | 'fireflies_extraction'
+  | 'voice_note_extraction'
+  | 'signal_trigger'
+  | 'ai_suggestion';
 ```
 
 ```typescript
-// types/api.ts
+// types/risk.ts
 
 /**
- * Standard API response wrapper
- * @interface ApiResponse
+ * Portfolio risk alert
  */
-export interface ApiResponse<T> {
-  success: boolean;
-  data?: T;
-  error?: ApiError;
-  meta?: ApiMeta;
+export interface RiskAlert {
+  id: string;
+  clientId: string;
+  
+  type: RiskAlertType;
+  severity: 'critical' | 'warning' | 'info';
+  
+  title: string;
+  description: string;
+  
+  // Specifics
+  currentValue: number;
+  threshold: number;
+  exposure: number;
+  
+  // Recommendation
+  suggestedAction: string;
+  
+  // Status
+  status: 'active' | 'acknowledged' | 'resolved';
+  acknowledgedAt?: Date;
+  resolvedAt?: Date;
+  
+  createdAt: Date;
 }
 
-export interface ApiError {
-  code: string;
-  message: string;
-  details?: Record<string, unknown>;
-}
+export type RiskAlertType = 
+  | 'sector_concentration'
+  | 'single_stock_exposure'
+  | 'illiquidity_risk'
+  | 'credit_utilization'
+  | 'margin_warning';
+```
 
-export interface ApiMeta {
-  total?: number;
-  page?: number;
-  pageSize?: number;
-  hasMore?: boolean;
-}
+```typescript
+// types/news.ts
 
 /**
- * Paginated list response
- * @interface PaginatedResponse
+ * Client-related news article
  */
-export interface PaginatedResponse<T> extends ApiResponse<T[]> {
-  meta: ApiMeta & {
-    total: number;
-    page: number;
-    pageSize: number;
-    hasMore: boolean;
-  };
+export interface NewsArticle {
+  id: string;
+  
+  // Content
+  title: string;
+  summary: string;
+  url: string;
+  source: string;
+  publishedAt: Date;
+  
+  // Client linking
+  linkedClientIds: string[];
+  
+  // Priority
+  priority: 'high' | 'relevant' | 'informational';
+  
+  // AI Analysis
+  aiSummary?: string;
+  suggestedAction?: string;
+  
+  // Status
+  isRead: boolean;
+  isDismissed: boolean;
+  
+  createdAt: Date;
 }
 ```
 
-### 5.2 Database Schema (Supabase/PostgreSQL)
+### 6.2 Database Schema (Supabase/PostgreSQL)
 
 ```sql
--- Prospects table
-CREATE TABLE prospects (
+-- Clients table (renamed from prospects)
+CREATE TABLE clients (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name VARCHAR(255) NOT NULL,
   email VARCHAR(255),
@@ -539,12 +836,31 @@ CREATE TABLE prospects (
   sector VARCHAR(100) NOT NULL,
   city VARCHAR(100) NOT NULL,
   network VARCHAR(100),
-  cluster VARCHAR(100),
+  
+  -- Wealth & Wallet
+  estimated_wealth DECIMAL(15,2) DEFAULT 0,
+  rm_wallet_share DECIMAL(15,2) DEFAULT 0,
+  wallet_share_percent DECIMAL(5,2) DEFAULT 0,
+  opportunity_gap DECIMAL(15,2) DEFAULT 0,
+  
+  -- Products
+  products_held TEXT[] DEFAULT '{}',
+  products_missing TEXT[] DEFAULT '{}',
+  
+  -- Lead Score
   lead_score INTEGER DEFAULT 0,
   lead_score_explanation JSONB,
+  
+  -- Status
   status VARCHAR(50) DEFAULT 'new',
+  risk_score INTEGER DEFAULT 0,
+  health_status VARCHAR(20) DEFAULT 'healthy',
+  
+  -- RM Assignment
   assigned_rm_id UUID REFERENCES auth.users(id),
   last_contacted_at TIMESTAMPTZ,
+  next_follow_up_at TIMESTAMPTZ,
+  
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -558,12 +874,113 @@ CREATE TABLE signals (
   title VARCHAR(500) NOT NULL,
   description TEXT,
   metadata JSONB,
-  prospect_id UUID REFERENCES prospects(id),
-  company_id VARCHAR(100),
+  
+  expected_timeline VARCHAR(50),
   detected_at TIMESTAMPTZ NOT NULL,
   expires_at TIMESTAMPTZ,
+  
+  client_id UUID REFERENCES clients(id),
+  company_id VARCHAR(100),
+  
   is_read BOOLEAN DEFAULT FALSE,
   is_actioned BOOLEAN DEFAULT FALSE,
+  actioned_at TIMESTAMPTZ,
+  action_notes TEXT,
+  
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Voice notes table
+CREATE TABLE voice_notes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  rm_id UUID REFERENCES auth.users(id) NOT NULL,
+  
+  audio_url TEXT NOT NULL,
+  duration INTEGER NOT NULL,
+  language VARCHAR(10) DEFAULT 'en',
+  
+  transcript TEXT,
+  transcript_status VARCHAR(20) DEFAULT 'pending',
+  
+  linked_client_ids UUID[] DEFAULT '{}',
+  detected_topics TEXT[] DEFAULT '{}',
+  
+  title VARCHAR(255),
+  source VARCHAR(50) DEFAULT 'app_recording',
+  
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Follow-ups table
+CREATE TABLE follow_ups (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  rm_id UUID REFERENCES auth.users(id) NOT NULL,
+  client_id UUID REFERENCES clients(id) NOT NULL,
+  
+  title VARCHAR(500) NOT NULL,
+  description TEXT,
+  type VARCHAR(50) NOT NULL,
+  priority VARCHAR(20) DEFAULT 'medium',
+  
+  due_date TIMESTAMPTZ NOT NULL,
+  reminder_at TIMESTAMPTZ,
+  
+  source VARCHAR(50) DEFAULT 'manual',
+  source_id VARCHAR(255),
+  source_context TEXT,
+  
+  status VARCHAR(20) DEFAULT 'pending',
+  completed_at TIMESTAMPTZ,
+  
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Risk alerts table
+CREATE TABLE risk_alerts (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  client_id UUID REFERENCES clients(id) NOT NULL,
+  
+  type VARCHAR(100) NOT NULL,
+  severity VARCHAR(20) NOT NULL,
+  
+  title VARCHAR(500) NOT NULL,
+  description TEXT,
+  
+  current_value DECIMAL(15,2),
+  threshold DECIMAL(15,2),
+  exposure DECIMAL(15,2),
+  
+  suggested_action TEXT,
+  
+  status VARCHAR(20) DEFAULT 'active',
+  acknowledged_at TIMESTAMPTZ,
+  resolved_at TIMESTAMPTZ,
+  
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- News articles table
+CREATE TABLE news_articles (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  
+  title VARCHAR(500) NOT NULL,
+  summary TEXT,
+  url TEXT NOT NULL,
+  source VARCHAR(255),
+  published_at TIMESTAMPTZ NOT NULL,
+  
+  linked_client_ids UUID[] DEFAULT '{}',
+  
+  priority VARCHAR(20) DEFAULT 'informational',
+  
+  ai_summary TEXT,
+  suggested_action TEXT,
+  
+  is_read BOOLEAN DEFAULT FALSE,
+  is_dismissed BOOLEAN DEFAULT FALSE,
+  
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -571,7 +988,7 @@ CREATE TABLE signals (
 CREATE TABLE activities (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) NOT NULL,
-  prospect_id UUID REFERENCES prospects(id),
+  client_id UUID REFERENCES clients(id),
   signal_id UUID REFERENCES signals(id),
   action_type VARCHAR(100) NOT NULL,
   notes TEXT,
@@ -583,20 +1000,56 @@ CREATE TABLE chat_sessions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) NOT NULL,
   messages JSONB DEFAULT '[]',
+  language VARCHAR(10) DEFAULT 'en',
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Indexes for performance
-CREATE INDEX idx_prospects_sector ON prospects(sector);
-CREATE INDEX idx_prospects_city ON prospects(city);
-CREATE INDEX idx_prospects_lead_score ON prospects(lead_score DESC);
+-- RM Performance metrics table
+CREATE TABLE rm_metrics (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  rm_id UUID REFERENCES auth.users(id) NOT NULL,
+  
+  period_start DATE NOT NULL,
+  period_end DATE NOT NULL,
+  
+  total_aum DECIMAL(15,2),
+  revenue_mtd DECIMAL(15,2),
+  
+  calls_made INTEGER DEFAULT 0,
+  meetings_held INTEGER DEFAULT 0,
+  follow_ups_completed INTEGER DEFAULT 0,
+  conversions INTEGER DEFAULT 0,
+  
+  retention_rate DECIMAL(5,2),
+  
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Indexes
+CREATE INDEX idx_clients_sector ON clients(sector);
+CREATE INDEX idx_clients_city ON clients(city);
+CREATE INDEX idx_clients_lead_score ON clients(lead_score DESC);
+CREATE INDEX idx_clients_assigned_rm ON clients(assigned_rm_id);
+CREATE INDEX idx_clients_health ON clients(health_status);
+
 CREATE INDEX idx_signals_type ON signals(type);
+CREATE INDEX idx_signals_severity ON signals(severity);
 CREATE INDEX idx_signals_detected_at ON signals(detected_at DESC);
-CREATE INDEX idx_signals_prospect ON signals(prospect_id);
+CREATE INDEX idx_signals_client ON signals(client_id);
+
+CREATE INDEX idx_follow_ups_rm ON follow_ups(rm_id);
+CREATE INDEX idx_follow_ups_due ON follow_ups(due_date);
+CREATE INDEX idx_follow_ups_status ON follow_ups(status);
+
+CREATE INDEX idx_risk_alerts_client ON risk_alerts(client_id);
+CREATE INDEX idx_risk_alerts_status ON risk_alerts(status);
+
+CREATE INDEX idx_voice_notes_rm ON voice_notes(rm_id);
+CREATE INDEX idx_news_priority ON news_articles(priority);
 ```
 
-### 5.3 Graph Schema (Neo4j)
+### 6.3 Graph Schema (Neo4j)
 
 ```cypher
 // Node labels and properties
@@ -607,7 +1060,9 @@ CREATE INDEX idx_signals_prospect ON signals(prospect_id);
   name: string,
   designation: string,
   netWorth: number,
-  prospectId: string  // Link to Supabase
+  clientId: string,           // Link to Supabase
+  isClient: boolean,
+  isInfluencer: boolean
 })
 
 // Company node
@@ -620,11 +1075,12 @@ CREATE INDEX idx_signals_prospect ON signals(prospect_id);
   valuation: number
 })
 
-// Sector node
-(:Sector {
+// Network/Club node (TiE, YPO, etc.)
+(:Network {
   id: string,
   name: string,
-  category: string
+  type: string,               // 'industry_body', 'club', 'alumni'
+  memberCount: number
 })
 
 // LiquidityEvent node
@@ -634,238 +1090,219 @@ CREATE INDEX idx_signals_prospect ON signals(prospect_id);
   amount: number,
   date: date,
   source: string,
-  signalId: string  // Link to Supabase signal
+  signalId: string
+})
+
+// RM node
+(:RM {
+  id: string,
+  name: string,
+  email: string
 })
 
 // Relationships
-(:Person)-[:PROMOTER_OF]->(:Company)
+(:Person)-[:PROMOTER_OF {stake: number}]->(:Company)
 (:Person)-[:DIRECTOR_OF]->(:Company)
 (:Person)-[:INVESTOR_IN {amount: number, date: date}]->(:Company)
-(:Company)-[:BELONGS_TO]->(:Sector)
+(:Person)-[:MEMBER_OF {since: date}]->(:Network)
+(:Person)-[:KNOWS {strength: number}]->(:Person)
+
+(:Company)-[:BELONGS_TO_SECTOR]->(:Sector)
+
 (:LiquidityEvent)-[:AFFECTS]->(:Person)
 (:LiquidityEvent)-[:INVOLVES]->(:Company)
+
+(:RM)-[:MANAGES]->(:Person)
+(:RM)-[:CONNECTED_TO {via: string}]->(:Person)  // Warm intro paths
 ```
 
 ---
 
-## 6. API Endpoint Specification
+## 7. Fireflies.ai Integration Flow
 
-### 6.1 Prospects API
-
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| `GET` | `/api/prospects` | List prospects with filters | ✅ |
-| `GET` | `/api/prospects/:id` | Get prospect by ID | ✅ |
-| `POST` | `/api/prospects` | Create new prospect | ✅ |
-| `PATCH` | `/api/prospects/:id` | Update prospect | ✅ |
-| `DELETE` | `/api/prospects/:id` | Delete prospect | ✅ |
-
-**GET /api/prospects - Query Parameters:**
-
-```typescript
-interface ProspectQueryParams {
-  page?: number;          // Default: 1
-  pageSize?: number;      // Default: 20, Max: 100
-  sector?: string;        // Filter by sector
-  city?: string;          // Filter by city
-  network?: string;       // Filter by network
-  cluster?: string;       // Filter by cluster
-  status?: ProspectStatus;
-  minLeadScore?: number;
-  sortBy?: 'leadScore' | 'name' | 'updatedAt';
-  sortOrder?: 'asc' | 'desc';
-  search?: string;        // Full-text search
-}
-```
-
-**Response Example:**
-
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": "uuid-1234",
-      "name": "Rajesh Kumar",
-      "company": "Tech Innovations Pvt Ltd",
-      "sector": "Technology",
-      "city": "Mumbai",
-      "leadScore": 85,
-      "leadScoreExplanation": {
-        "score": 85,
-        "factors": [
-          { "signal": "IPO Filing", "weight": 40, "description": "Company filed DRHP" },
-          { "signal": "Funding Round", "weight": 30, "description": "Series C at $50M" }
-        ]
-      },
-      "status": "new"
-    }
-  ],
-  "meta": {
-    "total": 150,
-    "page": 1,
-    "pageSize": 20,
-    "hasMore": true
-  }
-}
-```
-
-### 6.2 Signals API
-
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| `GET` | `/api/signals` | List all signals | ✅ |
-| `GET` | `/api/signals/recent` | Get recent signals (last 24h) | ✅ |
-| `GET` | `/api/signals/:id` | Get signal details | ✅ |
-| `PATCH` | `/api/signals/:id/read` | Mark signal as read | ✅ |
-| `PATCH` | `/api/signals/:id/action` | Mark signal as actioned | ✅ |
-
-### 6.3 Chat API
-
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| `POST` | `/api/chat` | Send message (streaming) | ✅ |
-| `GET` | `/api/chat/history` | Get chat history | ✅ |
-| `DELETE` | `/api/chat/history` | Clear chat history | ✅ |
-
-**POST /api/chat - Request:**
-
-```json
-{
-  "message": "Which clients may experience liquidity events in the next 30 days?",
-  "sessionId": "uuid-session"
-}
-```
-
-**Response (Server-Sent Events):**
+### Workflow Diagram
 
 ```
-data: {"type": "start"}
-data: {"type": "text", "content": "Based on my analysis, "}
-data: {"type": "text", "content": "I found 5 prospects..."}
-data: {"type": "sources", "sources": ["PrivateCircle", "Zauba"]}
-data: {"type": "end"}
+┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
+│   RM Meeting     │     │  Fireflies.ai    │     │    OneDrive      │
+│ (Zoom/Teams/Meet)│────▶│  Auto-Records    │────▶│  Sync Folder     │
+└──────────────────┘     └──────────────────┘     └────────┬─────────┘
+                                                           │
+                                                           ▼
+┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
+│  RM Follow-up    │◀────│  UHNW Platform   │◀────│  OneDrive        │
+│     Queue        │     │  AI Processing   │     │  Webhook/Poll    │
+└──────────────────┘     └──────────────────┘     └──────────────────┘
 ```
 
-### 6.4 Graph API
+### Processing Steps
 
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| `GET` | `/api/graph` | Get full graph data | ✅ |
-| `GET` | `/api/graph/prospect/:id` | Get graph centered on prospect | ✅ |
-| `GET` | `/api/graph/company/:id` | Get graph centered on company | ✅ |
+1. **Meeting Capture**
+   - Fireflies.ai bot joins meeting automatically
+   - Records audio, generates transcript
+   - Pushes to OneDrive: `UHNW-Meetings/[RM-Name]/[Date]/`
 
-### 6.5 Metrics API
+2. **Platform Ingestion**
+   - OneDrive webhook or polling detects new files
+   - Platform fetches transcript.txt and summary.json
 
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| `GET` | `/api/metrics` | Get dashboard metrics | ✅ |
-| `GET` | `/api/metrics/activity` | Get activity log | ✅ |
+3. **AI Processing**
+   - Extract client names from conversation
+   - Match against RM's client database
+   - Identify action items (commitments, requests, follow-ups)
+   - Extract topics discussed
+   - Assess sentiment
+
+4. **Follow-up Creation**
+   - Auto-create tasks with due dates
+   - Link to client profiles
+   - Include transcript context
+   - Set priority based on client score + urgency
+
+5. **RM Review**
+   - New follow-ups appear in dashboard
+   - RM can edit, snooze, or complete
+   - System learns from corrections
 
 ---
 
-## 7. Component Hierarchy
+## 8. API Endpoint Specification
 
-```
-RootLayout (app/layout.tsx)
-│
-├── AuthLayout (app/(auth)/layout.tsx)
-│   ├── LoginPage
-│   │   ├── LoginForm
-│   │   └── OAuthButtons
-│   └── ForgotPasswordPage
-│
-└── DashboardLayout (app/(dashboard)/layout.tsx)
-    ├── Header
-    │   ├── Logo
-    │   ├── SearchBar
-    │   ├── NotificationBell
-    │   └── UserMenu
-    │       ├── Avatar
-    │       └── Dropdown
-    │
-    ├── Sidebar
-    │   ├── Navigation
-    │   │   └── NavItem (× n)
-    │   ├── FilterPanel
-    │   │   ├── CityFilter
-    │   │   ├── SectorFilter
-    │   │   ├── NetworkFilter
-    │   │   └── ClusterFilter
-    │   └── QuickMetrics
-    │
-    ├── MainContent
-    │   │
-    │   ├── DashboardPage (page.tsx)
-    │   │   ├── PageHeader
-    │   │   ├── MetricsGrid
-    │   │   │   └── MetricsCard (× 4)
-    │   │   ├── TopProspects
-    │   │   │   └── ProspectCard (× 5)
-    │   │   ├── RecentSignals
-    │   │   │   └── SignalCard (× 5)
-    │   │   └── ActivityFeed
-    │   │
-    │   ├── ProspectsPage (prospects/page.tsx)
-    │   │   ├── PageHeader
-    │   │   │   └── ActionButtons
-    │   │   ├── ProspectFilters (mobile)
-    │   │   └── ProspectList
-    │   │       └── ProspectCard (× n)
-    │   │           ├── Avatar
-    │   │           ├── LeadScoreIndicator
-    │   │           ├── SignalBadges
-    │   │           └── ActionButtons
-    │   │
-    │   ├── ProspectDetailPage (prospects/[id]/page.tsx)
-    │   │   ├── ProspectHeader
-    │   │   │   ├── Avatar
-    │   │   │   ├── ContactInfo
-    │   │   │   └── ActionButtons
-    │   │   ├── LeadScoreCard
-    │   │   │   ├── ScoreIndicator
-    │   │   │   └── LeadScoreExplanation
-    │   │   ├── SignalTimeline
-    │   │   │   └── SignalCard (× n)
-    │   │   ├── RelationshipGraph (mini)
-    │   │   └── SuggestedActions
-    │   │
-    │   ├── SignalsPage (signals/page.tsx)
-    │   │   ├── PageHeader
-    │   │   ├── SignalFilters
-    │   │   └── SignalList
-    │   │       └── SignalCard (× n)
-    │   │
-    │   ├── GraphPage (graph/page.tsx)
-    │   │   ├── GraphControls
-    │   │   │   ├── ZoomControls
-    │   │   │   ├── FilterControls
-    │   │   │   └── LayoutToggle
-    │   │   ├── RelationshipGraph (full)
-    │   │   │   └── GraphNode (× n)
-    │   │   └── NodeDetailPanel
-    │   │
-    │   └── AnalyticsPage (analytics/page.tsx)
-    │       ├── PageHeader
-    │       ├── DateRangePicker
-    │       └── ChartsGrid
-    │           ├── LeadTrendChart
-    │           ├── SignalDistributionChart
-    │           └── ConversionFunnel
-    │
-    └── ChatBot (floating, always visible)
-        ├── ChatToggle
-        └── ChatPanel
-            ├── ChatHeader
-            ├── ChatMessages
-            │   └── ChatMessage (× n)
-            ├── ChatSuggestions
-            └── ChatInput
-```
+### 8.1 Clients API
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/clients` | List RM's clients with filters |
+| `GET` | `/api/clients/:id` | Get client by ID |
+| `POST` | `/api/clients` | Create new client |
+| `PATCH` | `/api/clients/:id` | Update client |
+| `DELETE` | `/api/clients/:id` | Delete client |
+
+### 8.2 Signals API
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/signals` | List all signals |
+| `GET` | `/api/signals/recent` | Get recent signals (last 24h) |
+| `PATCH` | `/api/signals/:id/read` | Mark signal as read |
+| `PATCH` | `/api/signals/:id/action` | Mark signal as actioned |
+
+### 8.3 Intelligence API (Manual Input)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/intelligence` | RM adds manual intelligence |
+
+### 8.4 Chat API
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/chat` | Send message (streaming, multilingual) |
+| `GET` | `/api/chat/history` | Get chat history |
+
+### 8.5 Wallet Share API
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/wallet-share` | Get RM's wallet share summary |
+| `GET` | `/api/wallet-share/:clientId` | Get client wallet analysis |
+
+### 8.6 Cross-Sell API
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/cross-sell` | Get cross-sell opportunities |
+| `GET` | `/api/cross-sell/recommendations` | Get AI recommendations |
+
+### 8.7 Voice Notes API
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/voice-notes` | List RM's voice notes |
+| `POST` | `/api/voice-notes` | Upload new voice note |
+| `POST` | `/api/voice-notes/transcribe` | Transcribe audio |
+| `DELETE` | `/api/voice-notes/:id` | Delete voice note |
+
+### 8.8 Follow-ups API
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/follow-ups` | List RM's follow-ups |
+| `POST` | `/api/follow-ups` | Create follow-up |
+| `PATCH` | `/api/follow-ups/:id` | Update follow-up |
+| `PATCH` | `/api/follow-ups/:id/complete` | Mark complete |
+
+### 8.9 Fireflies Webhook
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/fireflies/webhook` | Receive Fireflies notification |
+
+### 8.10 Risk Alerts API
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/risk-alerts` | Get active risk alerts |
+| `PATCH` | `/api/risk-alerts/:id/acknowledge` | Acknowledge alert |
+| `PATCH` | `/api/risk-alerts/:id/resolve` | Resolve alert |
+
+### 8.11 News API
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/news` | Get client news feed |
+| `PATCH` | `/api/news/:id/read` | Mark as read |
+| `PATCH` | `/api/news/:id/dismiss` | Dismiss article |
+
+### 8.12 Metrics API
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/metrics` | Get dashboard metrics |
+| `GET` | `/api/metrics/performance` | Get RM performance data |
 
 ---
 
-## 8. Environment Variables
+## 9. Design System Reference
+
+Based on **Nuvama Wealth** inspired premium aesthetic:
+
+### Color Palette
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| Primary Navy | `#0A1628` | Headers, sidebars, trust |
+| Royal Blue | `#1E3A5F` | Interactive elements |
+| Gold Accent | `#C9A227` | CTAs, highlights, high scores |
+| Background | `#FFFFFF` | Main content |
+| Secondary BG | `#F8F9FA` | Cards, sections |
+| Text Primary | `#1A1A2E` | Headings, body |
+| Text Muted | `#5A6C7D` | Secondary text |
+| Success | `#28A745` | Positive indicators |
+| Warning | `#FFC107` | Caution states |
+| Error/Critical | `#DC3545` | Urgent actions, alerts |
+
+### Signal Severity Colors
+
+| Severity | Background | Border | Usage |
+|----------|------------|--------|-------|
+| Critical | `#F8D7DA` | `#DC3545` | Act within 24-48 hours |
+| High | `#FFE5CC` | `#FF8C00` | Act within 1 week |
+| Medium | `#FFF3CD` | `#FFC107` | Act within 2 weeks |
+| Low | `#D4EDDA` | `#28A745` | Monitor / Informational |
+
+### Lead Score Tiers
+
+| Score | Label | Color | Action |
+|-------|-------|-------|--------|
+| 90-100 | Excellent | Gold gradient | Act Now |
+| 70-89 | Good | Royal Blue | High Priority |
+| 50-69 | Fair | Slate | Nurture |
+| 0-49 | Low | Gray | Watch List |
+
+---
+
+## 10. Environment Variables
 
 ```bash
 # .env.example
@@ -888,22 +1325,39 @@ NEO4J_PASSWORD=your-password
 OPENAI_API_KEY=sk-your-api-key
 OPENAI_MODEL=gpt-4-turbo-preview
 
-# Data Sources (API keys for external data)
+# Azure Speech (for multilingual transcription)
+AZURE_SPEECH_KEY=your-key
+AZURE_SPEECH_REGION=your-region
+
+# Microsoft Graph (OneDrive)
+MICROSOFT_CLIENT_ID=your-client-id
+MICROSOFT_CLIENT_SECRET=your-client-secret
+MICROSOFT_TENANT_ID=your-tenant-id
+ONEDRIVE_FOLDER_PATH=/UHNW-Meetings
+
+# Fireflies.ai
+FIREFLIES_API_KEY=your-api-key
+FIREFLIES_WEBHOOK_SECRET=your-webhook-secret
+
+# Data Sources
 PRIVATE_CIRCLE_API_KEY=your-key
 ZAUBA_API_KEY=your-key
+NEWS_API_KEY=your-key
 
 # Feature Flags
 NEXT_PUBLIC_ENABLE_CHATBOT=true
-NEXT_PUBLIC_ENABLE_GRAPH=true
+NEXT_PUBLIC_ENABLE_VOICE_NOTES=true
+NEXT_PUBLIC_ENABLE_FIREFLIES=true
+NEXT_PUBLIC_ENABLE_NEWS_FEED=true
 ```
 
 ---
 
-## 9. Security Considerations
+## 11. Security Considerations
 
 ### Authentication & Authorization
 - Supabase Auth with Row Level Security (RLS)
-- Role-based access control (RM, Admin, Viewer)
+- Role-based access control (RM, Admin)
 - JWT token validation on all API routes
 - Session refresh with secure httpOnly cookies
 
@@ -912,40 +1366,65 @@ NEXT_PUBLIC_ENABLE_GRAPH=true
 - TLS 1.3 for data in transit
 - PII masking in logs
 - GDPR-compliant data handling
+- Meeting recordings stored with encryption
 
 ### API Security
 - Rate limiting (100 req/min per user)
 - Input validation with Zod schemas
 - CORS restricted to approved origins
-- SQL injection prevention via parameterized queries
+- Webhook signature verification (Fireflies)
 
 ---
 
-## 10. Performance Targets
+## 12. Performance Targets
 
 | Metric | Target |
 |--------|--------|
 | Time to First Byte (TTFB) | < 200ms |
 | Largest Contentful Paint (LCP) | < 2.5s |
 | First Input Delay (FID) | < 100ms |
-| Cumulative Layout Shift (CLS) | < 0.1 |
 | API Response Time (p95) | < 500ms |
 | Chat Response Start | < 1s |
+| Voice Transcription Start | < 3s |
+| Follow-up Extraction | < 30s after transcript available |
 
 ---
 
-## 11. Next Steps
+## 13. Implementation Roadmap
 
-1. [ ] Set up Next.js project with TypeScript
-2. [ ] Configure Supabase project and database schema
-3. [ ] Set up Neo4j Aura instance
-4. [ ] Implement authentication flow
-5. [ ] Build core UI components with Tailwind
-6. [ ] Implement Dashboard page (Story 1, 4, 7)
-7. [ ] Implement Prospects list and detail (Story 2, 3, 5)
-8. [ ] Implement Signals feed (Story 1, 9)
-9. [ ] Implement Relationship Graph (Story 8)
-10. [ ] Implement AI Chatbot (Story 6)
-11. [ ] Connect data sources for ingestion (Story 10)
-12. [ ] Testing and QA
-13. [ ] Deploy to Vercel
+### Phase 1: Core Platform (Weeks 1-4)
+- [ ] Project setup with Next.js 15
+- [ ] Supabase database schema
+- [ ] Authentication flow
+- [ ] Dashboard page (Story 1, 4, 7)
+- [ ] Client list and detail (Story 2, 3, 5)
+- [ ] Signals feed (Story 1, 9)
+
+### Phase 2: Intelligence Features (Weeks 5-8)
+- [ ] Lead scoring with explanations (Story 2)
+- [ ] AI Chatbot with multilingual support (Story 6)
+- [ ] Manual intelligence input (Story 11)
+- [ ] News feed integration (Story 12)
+- [ ] Data source connectors (Story 10)
+
+### Phase 3: Growth Features (Weeks 9-12)
+- [ ] Wallet share analysis (Story 14)
+- [ ] Cross-sell opportunities (Story 25)
+- [ ] Credit opportunities (Story 17)
+- [ ] Relationship graph (Story 8)
+- [ ] Network mapping (Story 20)
+
+### Phase 4: Productivity & Risk (Weeks 13-16)
+- [ ] Voice notes with transcription (Story 21)
+- [ ] Fireflies.ai integration (Story 21)
+- [ ] Auto follow-up creation (Story 21)
+- [ ] Risk concentration alerts (Story 24)
+- [ ] Client health monitoring (Story 22)
+- [ ] AI trend insights (Story 19)
+
+### Phase 5: Analytics & Polish (Weeks 17-20)
+- [ ] RM performance dashboard (Story 23)
+- [ ] Conversion/churn metrics (Story 18)
+- [ ] Mobile optimization
+- [ ] Testing and QA
+- [ ] Production deployment

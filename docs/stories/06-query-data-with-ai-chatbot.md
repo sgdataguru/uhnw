@@ -12,9 +12,13 @@
 * Chatbot returns relevant, accurate responses from the graph database
 * Responses include links or references to relevant prospects/signals
 * Chat history is maintained within the session
+* Supports queries in multiple languages (Hindi, English, and regional languages)
+* Provides contextual follow-up suggestions based on queries
 
 ## Notes
 
 * This feature is marked as "if feasible" - may be a future enhancement
 * Chatbot queries the underlying graph database directly
 * Should support questions about timing, clients, events, and relationships
+* Page 2 additions: "AI chatbot for queries in multiple languages"
+* Multilingual support is important for RM adoption across regions
