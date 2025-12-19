@@ -160,50 +160,127 @@ export interface SignalFilterOptions {
   sortOrder?: 'asc' | 'desc';
 }
 
-// Action types for prospects
-export type ActionType = 'call' | 'meeting' | 'email' | 'note' | 'review-portfolio' | 'custom';
+// Lead status types
+export type LeadStatus = 'new' | 'contacted' | 'engaged' | 'qualified' | 'converted' | 'inactive';
 
-// Priority levels for actions
-export type ActionPriority = 'high' | 'medium' | 'low';
+// Lead source types
+export type LeadSource = 'signal' | 'referral' | 'event' | 'manual' | 'imported';
 
-// Estimated impact levels
-export type ActionImpact = 'high' | 'medium' | 'low';
-
-// Action suggestion source
-export type ActionSource = 'ai' | 'rule-based' | 'manual';
-
-// Suggested action interface
-export interface SuggestedAction {
+// Lead type definition
+export interface Lead {
   id: string;
-  type: ActionType;
-  label: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
+  company: string;
+  title: string;
+  location: string;
+  sector: string;
+  network?: string;
+  status: LeadStatus;
+  source: LeadSource;
+  assignedRmId: string;
+  leadScore: number;
+  signals: Signal[];
+  lastContacted: Date | null;
+  notes?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Follow-up status types
+export type FollowUpStatus = 'new' | 'in_progress' | 'completed' | 'blocked';
+
+// Follow-up priority types
+export type FollowUpPriority = 'critical' | 'high' | 'medium' | 'low';
+
+// Follow-up type definition
+export interface FollowUp {
+  id: string;
+  leadId: string;
+  lead?: Lead;
+  rmId: string;
+  title: string;
   description: string;
-  priority: ActionPriority;
-  reasoning: string;
-  estimatedImpact: ActionImpact;
-  suggestedBy: ActionSource;
-  metadata?: {
-    talking_points?: string[];
-    context_notes?: string[];
-    best_time?: string;
-  };
+  status: FollowUpStatus;
+  priority: FollowUpPriority;
+  dueDate: Date;
+  completedAt: Date | null;
+  notes?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-// Prospect filters
-export interface ProspectFilters {
-  signalTypes?: SignalType[];
-  dateRange?: {
-    start: Date;
-    end: Date;
-  };
-  minScore?: number;
-  maxScore?: number;
-  cities?: string[];
-  sectors?: string[];
+// Activity type definitions
+export type ActivityType = 
+  | 'signal_viewed'
+  | 'signal_actioned'
+  | 'lead_created'
+  | 'lead_contacted'
+  | 'follow_up_created'
+  | 'follow_up_completed'
+  | 'follow_up_updated'
+  | 'lead_converted'
+  | 'intelligence_added'
+  | 'note_added';
+
+// Activity definition
+export interface Activity {
+  id: string;
+  userId: string;
+  actionType: ActivityType;
+  description: string;
+  leadId?: string;
+  signalId?: string;
+  followUpId?: string;
+  metadata?: Record<string, unknown>;
+  createdAt: Date;
 }
 
-// Sort options for prospects
-export type ProspectSortOption = 'score' | 'recent' | 'signal-strength';
+// Trend period types
+export type TrendPeriod = 'daily' | 'weekly' | 'monthly';
+
+// Date range interface
+export interface DateRange {
+  start: Date;
+  end: Date;
+}
+
+// Trend data point
+export interface TrendData {
+  date: Date;
+  leadsCreated: number;
+  signalsGenerated: number;
+  followUpsCompleted: number;
+  leadsContacted: number;
+  conversions: number;
+}
+
+// Enhanced dashboard metrics with follow-up tracking
+export interface EnhancedDashboardMetrics extends DashboardMetrics {
+  // Lead metrics
+  leadsThisWeek: number;
+  leadsChange: number; // % change from previous period
+  
+  // Signal metrics  
+  signalsThisWeek: number;
+  
+  // Follow-up metrics
+  totalFollowUps: number;
+  completedFollowUps: number;
+  pendingFollowUps: number;
+  overdueFollowUps: number;
+  followUpCompletionRate: number; // %
+  
+  // Conversion metrics
+  conversions: number;
+  conversionRate: number; // %
+  
+  // Activity metrics
+  totalActivities: number;
+  activitiesToday: number;
+}
 
 // API Response types
 export interface ApiResponse<T> {
