@@ -4,11 +4,16 @@
  * @module app/(dashboard)/signals
  */
 
+'use client';
+
+import { useState } from 'react';
 import { Header, Sidebar } from '@/app/components/layout';
 import SignalList from '@/app/components/features/signals/SignalList';
-import { Card } from '@/app/components/ui';
+import { Card, Button } from '@/app/components/ui';
+import { AddIntelligenceModal } from '@/app/components/features/intelligence';
 
 export default function SignalsPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <div className="min-h-screen bg-[#F8F9FA]">
       <Header userName="John Smith" userInitials="JS" />
@@ -28,6 +33,17 @@ export default function SignalsPage() {
                   30-90 day advance intelligence on UHNW liquidity events
                 </p>
               </div>
+              <Button
+                variant="primary"
+                onClick={() => setIsModalOpen(true)}
+                leftIcon={
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                }
+              >
+                Add Intelligence
+              </Button>
             </div>
           </div>
 
@@ -83,6 +99,16 @@ export default function SignalsPage() {
           <SignalList />
         </main>
       </div>
+
+      {/* Add Intelligence Modal */}
+      <AddIntelligenceModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={() => {
+          // In production, this would refresh the signals list
+          alert('Intelligence added! The signals list would refresh here.');
+        }}
+      />
     </div>
   );
 }
