@@ -8,7 +8,6 @@ import { create } from 'zustand';
 import type {
   EngagementSuggestion,
   SuggestionFilters,
-  SuggestionStatus,
   SnoozeDuration,
 } from '@/types';
 

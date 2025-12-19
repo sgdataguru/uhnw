@@ -6,7 +6,6 @@
 'use client';
 
 import { useState } from 'react';
-import Card from '../ui/Card';
 import Button from '../ui/Button';
 import type { EngagementSuggestion, SnoozeDuration } from '@/types';
 import { useSuggestionActions } from '@/hooks/useSuggestionActions';

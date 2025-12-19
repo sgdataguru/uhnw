@@ -89,6 +89,7 @@ export function useSuggestions(options: UseSuggestionsOptions = {}) {
     if (autoFetch) {
       fetchSuggestions();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoFetch, refetchTrigger, JSON.stringify(filters)]);
   
   return {
