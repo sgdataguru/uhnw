@@ -21,6 +21,11 @@ const mockMetrics: DashboardMetrics = {
   signalsGrowth: '+8%',
   followUps: 18,
   followUpsDueToday: true,
+  // RM-specific metrics
+  myClients: 47,
+  myClientsAum: '₹2,450 Cr',
+  activeOpps: 12,
+  activeOppsValue: '₹385 Cr',
 };
 
 const mockProspects: Prospect[] = [
@@ -52,6 +57,10 @@ const mockProspects: Prospect[] = [
     lastContacted: new Date('2024-12-14'),
     createdAt: new Date('2024-01-15'),
     updatedAt: new Date('2024-12-15'),
+    // RM-specific fields
+    estWealth: '₹450 Cr',
+    myShare: '₹180 Cr',
+    sharePercentage: 40,
   },
   {
     id: '2',
@@ -79,6 +88,41 @@ const mockProspects: Prospect[] = [
     lastContacted: new Date('2024-12-10'),
     createdAt: new Date('2024-02-20'),
     updatedAt: new Date('2024-12-12'),
+    // RM-specific fields
+    estWealth: '₹320 Cr',
+    myShare: '₹95 Cr',
+    sharePercentage: 30,
+  },
+  {
+    id: '3',
+    firstName: 'Vikram',
+    lastName: 'Singh',
+    initials: 'VS',
+    title: 'Founder & MD',
+    company: 'GreenEnergy Solutions',
+    location: 'Bangalore',
+    sector: 'Clean Energy',
+    network: 'EO',
+    email: 'vikram@greenenergy.com',
+    phone: '+91 98765 43212',
+    leadScore: 85,
+    scoreCategory: 'good',
+    scoreBreakdown: [
+      { label: 'ESG Focus', points: 30, description: 'High ESG rating' },
+      { label: 'Govt Contracts', points: 28, description: 'Solar projects' },
+      { label: 'Growth Rate', points: 20, description: '45% YoY' },
+      { label: 'Network', points: 7, description: '6 UHNW connections' },
+    ],
+    signals: [
+      { id: 's5', type: 'contract', severity: 'high', title: 'Govt Contract', description: '₹500 Cr solar project', source: 'Tenders Portal', createdAt: new Date('2024-12-11'), isActioned: false },
+    ],
+    lastContacted: new Date('2024-12-08'),
+    createdAt: new Date('2024-03-10'),
+    updatedAt: new Date('2024-12-11'),
+    // RM-specific fields
+    estWealth: '₹280 Cr',
+    myShare: '₹70 Cr',
+    sharePercentage: 25,
   },
 ];
 
@@ -143,23 +187,23 @@ export default function Dashboard() {
             <Card>
               <div className="flex flex-col">
                 <span className="text-xs font-semibold text-[#8E99A4] uppercase tracking-wider">
-                  Total Leads
+                  My Clients
                 </span>
                 <div className="flex items-baseline gap-2 mt-2">
                   <span className="text-3xl font-bold text-[#1A1A2E]">
-                    {mockMetrics.totalLeads.toLocaleString()}
-                  </span>
-                  <span className="text-sm font-medium text-green-600">
-                    {mockMetrics.leadsGrowth}
+                    {mockMetrics.myClients}
                   </span>
                 </div>
+                <span className="text-sm text-[#5A6C7D] mt-1">
+                  AUM: {mockMetrics.myClientsAum}
+                </span>
               </div>
             </Card>
             
             <Card>
               <div className="flex flex-col">
                 <span className="text-xs font-semibold text-[#8E99A4] uppercase tracking-wider">
-                  New Today
+                  New Signals
                 </span>
                 <div className="flex items-baseline gap-2 mt-2">
                   <span className="text-3xl font-bold text-[#1A1A2E]">
@@ -169,22 +213,25 @@ export default function Dashboard() {
                     +{mockMetrics.newTodayChange}
                   </span>
                 </div>
+                <span className="text-sm text-[#5A6C7D] mt-1">
+                  Today
+                </span>
               </div>
             </Card>
             
             <Card>
               <div className="flex flex-col">
                 <span className="text-xs font-semibold text-[#8E99A4] uppercase tracking-wider">
-                  Signals Detected
+                  Active Opportunities
                 </span>
                 <div className="flex items-baseline gap-2 mt-2">
                   <span className="text-3xl font-bold text-[#1A1A2E]">
-                    {mockMetrics.signalsDetected}
-                  </span>
-                  <span className="text-sm font-medium text-green-600">
-                    {mockMetrics.signalsGrowth}
+                    {mockMetrics.activeOpps}
                   </span>
                 </div>
+                <span className="text-sm text-[#5A6C7D] mt-1">
+                  Value: {mockMetrics.activeOppsValue}
+                </span>
               </div>
             </Card>
             
@@ -228,11 +275,11 @@ export default function Dashboard() {
                     className="flex items-center justify-between p-4 bg-[#F8F9FA] rounded-lg hover:bg-[#EFF1F3] transition-colors cursor-pointer"
                     onClick={() => openPanel(prospect.id)}
                   >
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4 flex-1">
                       <div className="w-10 h-10 rounded-full bg-[#0A1628] text-white flex items-center justify-center font-semibold text-sm">
                         {prospect.initials}
                       </div>
-                      <div>
+                      <div className="flex-1">
                         <p className="font-medium text-[#1A1A2E]">
                           {prospect.firstName} {prospect.lastName}
                         </p>
@@ -240,15 +287,23 @@ export default function Dashboard() {
                         <p className="text-xs text-[#8E99A4]">
                           {prospect.location} | {prospect.sector}
                         </p>
+                        {prospect.myShare && (
+                          <div className="mt-1 flex items-center gap-2">
+                            <span className="text-xs text-[#5A6C7D]">
+                              Wallet Share: {prospect.myShare} ({prospect.sharePercentage}%)
+                            </span>
+                          </div>
+                        )}
                       </div>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right ml-4">
                       <span className={`text-2xl font-bold ${
                         prospect.leadScore >= 90 ? 'text-[#C9A227]' : 
                         prospect.leadScore >= 70 ? 'text-[#1E3A5F]' : 'text-[#5A6C7D]'
                       }`}>
                         {prospect.leadScore}
                       </span>
+                      <p className="text-xs text-[#8E99A4]">Score</p>
                     </div>
                   </div>
                 ))}

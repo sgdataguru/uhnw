@@ -63,6 +63,38 @@ export default function ProspectCard({
         <span>{prospect.network}</span>
       </div>
 
+      {/* Wallet Share (if available) */}
+      {prospect.estWealth && prospect.myShare && (
+        <div className="mt-4 p-3 bg-gradient-to-r from-[#0A1628]/5 to-[#1E3A5F]/5 rounded-lg border border-[#1E3A5F]/20">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs font-semibold text-[#8E99A4] uppercase tracking-wider">
+                Est. Wealth
+              </p>
+              <p className="text-lg font-bold text-[#1A1A2E] mt-1">
+                {prospect.estWealth}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-xs font-semibold text-[#8E99A4] uppercase tracking-wider">
+                My Share
+              </p>
+              <p className="text-lg font-bold text-[#C9A227] mt-1">
+                {prospect.myShare}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-xs font-semibold text-[#8E99A4] uppercase tracking-wider">
+                % Share
+              </p>
+              <p className="text-lg font-bold text-[#1E3A5F] mt-1">
+                {prospect.sharePercentage}%
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Active Signals */}
       {recentSignals.length > 0 && (
         <div className="mt-4">

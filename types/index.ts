@@ -114,6 +114,10 @@ export interface Prospect {
   lastContacted: Date | null;
   createdAt: Date;
   updatedAt: Date;
+  // RM-specific fields
+  estWealth?: string;
+  myShare?: string;
+  sharePercentage?: number;
 }
 
 // Dashboard metrics
@@ -126,6 +130,11 @@ export interface DashboardMetrics {
   signalsGrowth: string;
   followUps: number;
   followUpsDueToday: boolean;
+  // RM-specific metrics
+  myClients?: number;
+  myClientsAum?: string;
+  activeOpps?: number;
+  activeOppsValue?: string;
 }
 
 // Activity feed item
