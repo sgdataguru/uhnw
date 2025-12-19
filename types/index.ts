@@ -160,6 +160,51 @@ export interface SignalFilterOptions {
   sortOrder?: 'asc' | 'desc';
 }
 
+// Action types for prospects
+export type ActionType = 'call' | 'meeting' | 'email' | 'note' | 'review-portfolio' | 'custom';
+
+// Priority levels for actions
+export type ActionPriority = 'high' | 'medium' | 'low';
+
+// Estimated impact levels
+export type ActionImpact = 'high' | 'medium' | 'low';
+
+// Action suggestion source
+export type ActionSource = 'ai' | 'rule-based' | 'manual';
+
+// Suggested action interface
+export interface SuggestedAction {
+  id: string;
+  type: ActionType;
+  label: string;
+  description: string;
+  priority: ActionPriority;
+  reasoning: string;
+  estimatedImpact: ActionImpact;
+  suggestedBy: ActionSource;
+  metadata?: {
+    talking_points?: string[];
+    context_notes?: string[];
+    best_time?: string;
+  };
+}
+
+// Prospect filters
+export interface ProspectFilters {
+  signalTypes?: SignalType[];
+  dateRange?: {
+    start: Date;
+    end: Date;
+  };
+  minScore?: number;
+  maxScore?: number;
+  cities?: string[];
+  sectors?: string[];
+}
+
+// Sort options for prospects
+export type ProspectSortOption = 'score' | 'recent' | 'signal-strength';
+
 // API Response types
 export interface ApiResponse<T> {
   success: boolean;
@@ -178,5 +223,37 @@ export interface PaginatedResponse<T> {
     limit: number;
     offset: number;
     hasMore: boolean;
+  };
+}
+
+// Prospects API response
+export interface ProspectsResponse {
+  success: boolean;
+  data: {
+    prospects: Prospect[];
+    metadata: {
+      total: number;
+      page: number;
+      pageSize: number;
+      hasMore: boolean;
+      lastUpdated: string;
+    };
+  };
+  error?: {
+    code: string;
+    message: string;
+  };
+}
+
+// Suggested actions API response
+export interface SuggestedActionsResponse {
+  success: boolean;
+  data: {
+    actions: SuggestedAction[];
+    reasoning: string;
+  };
+  error?: {
+    code: string;
+    message: string;
   };
 }
