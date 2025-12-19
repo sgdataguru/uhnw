@@ -180,3 +180,6 @@ export interface PaginatedResponse<T> {
     hasMore: boolean;
   };
 }
+
+// Export graph types
+export * from './graph';
