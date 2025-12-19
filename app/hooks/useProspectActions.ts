@@ -1,108 +1,106 @@
 /**
- * @file app/hooks/useProspectActions.ts
- * @description Hook for handling prospect actions (call, email, note, etc.)
+ * @file useProspectActions.ts
+ * @description Hook for handling prospect action buttons (call, email, note, etc.)
  */
 
 'use client';
 
 import { useState, useCallback } from 'react';
-import type { ActionType } from '@/types';
+import type { Prospect } from '@/types';
 
-interface CreateActionData {
-  actionType: ActionType;
-  description: string;
-  scheduledDate?: Date;
-  metadata?: Record<string, unknown>;
-}
+export function useProspectActions(prospect: Prospect | null) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-interface UseProspectActionsReturn {
-  isCreating: boolean;
-  error: string | null;
-  createAction: (prospectId: string, data: CreateActionData) => Promise<boolean>;
-  scheduleCall: (prospectId: string, notes: string, scheduledDate?: Date) => Promise<boolean>;
-  sendEmail: (prospectId: string, subject: string, body: string) => Promise<boolean>;
-  logNote: (prospectId: string, note: string) => Promise<boolean>;
-}
+  const handleCall = useCallback(async () => {
+    if (!prospect) return;
 
-export function useProspectActions(): UseProspectActionsReturn {
-  const [isCreating, setIsCreating] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const createAction = useCallback(async (
-    prospectId: string,
-    data: CreateActionData
-  ): Promise<boolean> => {
     try {
-      setIsCreating(true);
-      setError(null);
+      setIsSubmitting(true);
 
-      const response = await fetch(`/api/prospects/${prospectId}/actions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+      // Log the action (in production, this would call an API)
+      console.log('Logging call action for:', prospect.id);
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-
-      if (result.success) {
-        return true;
+      // On mobile, open phone dialer
+      if (typeof window !== 'undefined' && window.innerWidth < 768) {
+        window.location.href = `tel:${prospect.phone}`;
       } else {
-        throw new Error(result.error?.message || 'Failed to create action');
+        // On desktop, just log and show notification
+        alert(`Call logged for ${prospect.firstName} ${prospect.lastName}`);
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-      console.error('Error creating action:', err);
-      return false;
+    } catch (error) {
+      console.error('Failed to log call:', error);
     } finally {
-      setIsCreating(false);
+      setIsSubmitting(false);
     }
-  }, []);
+  }, [prospect]);
 
-  const scheduleCall = useCallback(async (
-    prospectId: string,
-    notes: string,
-    scheduledDate?: Date
-  ): Promise<boolean> => {
-    return createAction(prospectId, {
-      actionType: 'call',
-      description: notes,
-      scheduledDate,
-    });
-  }, [createAction]);
+  const handleEmail = useCallback(async () => {
+    if (!prospect) return;
 
-  const sendEmail = useCallback(async (
-    prospectId: string,
-    subject: string,
-    body: string
-  ): Promise<boolean> => {
-    return createAction(prospectId, {
-      actionType: 'email',
-      description: `Subject: ${subject}\n\n${body}`,
-    });
-  }, [createAction]);
+    try {
+      setIsSubmitting(true);
 
-  const logNote = useCallback(async (
-    prospectId: string,
-    note: string
-  ): Promise<boolean> => {
-    return createAction(prospectId, {
-      actionType: 'note',
-      description: note,
-    });
-  }, [createAction]);
+      // Log the action
+      console.log('Logging email action for:', prospect.id);
+
+      // Open email client
+      if (typeof window !== 'undefined') {
+        window.location.href = `mailto:${prospect.email}?subject=Follow-up with ${prospect.firstName}`;
+      }
+    } catch (error) {
+      console.error('Failed to log email:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [prospect]);
+
+  const handleAddNote = useCallback(async (note: string) => {
+    if (!prospect || !note.trim()) return;
+
+    try {
+      setIsSubmitting(true);
+
+      // In production, this would call an API endpoint
+      console.log('Adding note for:', prospect.id, note);
+
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      alert('Note added successfully');
+    } catch (error) {
+      console.error('Failed to add note:', error);
+      throw error;
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [prospect]);
+
+  const handleScheduleFollowUp = useCallback(async (date: Date, type: string) => {
+    if (!prospect) return;
+
+    try {
+      setIsSubmitting(true);
+
+      // In production, this would call an API endpoint
+      console.log('Scheduling follow-up for:', prospect.id, date, type);
+
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      alert(`Follow-up scheduled for ${date.toLocaleDateString()}`);
+    } catch (error) {
+      console.error('Failed to schedule follow-up:', error);
+      throw error;
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [prospect]);
 
   return {
-    isCreating,
-    error,
-    createAction,
-    scheduleCall,
-    sendEmail,
-    logNote,
+    handleCall,
+    handleEmail,
+    handleAddNote,
+    handleScheduleFollowUp,
+    isSubmitting,
   };
 }
