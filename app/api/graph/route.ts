@@ -4,7 +4,7 @@
  */
 
 import { NextResponse } from 'next/server';
-import { mockNodes, mockEdges, getGraphStats } from '@/lib/mock-data/graphData';
+import { mockNodes, mockEdges } from '@/lib/mock-data/graphData';
 import type { GraphNode, GraphEdge, GraphFilters, NodeType } from '@/types/graph';
 
 export async function GET(request: Request) {

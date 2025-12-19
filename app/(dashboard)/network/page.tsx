@@ -113,7 +113,7 @@ export default function NetworkPage() {
       case 'circular':
         return applyCircularLayout(nodes, canvasWidth, canvasHeight);
       default:
-        return nodes;
+        return applyForceDirectedLayout(nodes, edges, canvasWidth, canvasHeight);
     }
   }, [nodes, edges, layout, canvasWidth, canvasHeight]);
 

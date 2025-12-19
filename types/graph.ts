@@ -27,7 +27,6 @@ export type EdgeType =
 // Graph layout algorithm types
 export type GraphLayout = 
   | 'force-directed'
-  | 'hierarchical'
   | 'circular'
   | 'radial';
 

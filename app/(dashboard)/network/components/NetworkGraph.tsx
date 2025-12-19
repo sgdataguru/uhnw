@@ -5,7 +5,7 @@
 
 'use client';
 
-import { useMemo, useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import type { GraphNode, GraphEdge, Viewport } from '@/types/graph';
 import { getNodeStyle, getEdgeStyle, getNodeIcon } from '@/lib/utils/graph-helpers';
 
