@@ -3,7 +3,6 @@
  * @description Status indicator component for follow-ups and leads
  */
 
-import { ReactNode } from 'react';
 import type { FollowUpStatus, LeadStatus } from '@/types';
 
 interface StatusPillProps {

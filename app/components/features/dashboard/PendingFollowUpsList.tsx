@@ -51,7 +51,7 @@ export default function PendingFollowUpsList({
       {followUps.length === 0 ? (
         <div className="text-center py-8 text-[#8E99A4]">
           <p>No pending follow-ups</p>
-          <p className="text-sm mt-1">You're all caught up! 🎉</p>
+          <p className="text-sm mt-1">You&apos;re all caught up! 🎉</p>
         </div>
       ) : (
         <div className="space-y-3">
