@@ -14,6 +14,7 @@ import AUMTrendChart from './components/AUMTrendChart';
 import RegionalBreakdown from './components/RegionalBreakdown';
 import ExecutiveActionCenter from './components/ExecutiveActionCenter';
 import LiquidityTriggersPanel from './components/LiquidityTriggersPanel';
+import FloatingChatbot from '@/app/components/features/FloatingChatbot';
 import { useEnhancedExecutiveMetrics } from '@/app/hooks/useEnhancedExecutiveMetrics';
 import type { RMTask } from '@/types';
 
@@ -146,6 +147,9 @@ export default function ExecutiveDashboard() {
                     </div>
                 </main>
             </div>
+
+            {/* Floating AI Chatbot */}
+            <FloatingChatbot userRole="executive" userName="Amit Saxena" />
         </div>
     );
 }

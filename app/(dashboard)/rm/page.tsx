@@ -13,6 +13,7 @@ import { ProspectDetailPanel } from '@/app/components/features';
 import { usePanelStore } from '@/store/panel-store';
 import { useRMMetrics } from '@/app/hooks/useRMMetrics';
 import SuggestionsSection from '@/app/components/suggestions/SuggestionsSection';
+import FloatingChatbot from '@/app/components/features/FloatingChatbot';
 import type { Prospect } from '@/types';
 
 // Mock prospects for RM's book
@@ -130,6 +131,9 @@ export default function RMDashboard() {
 
             {/* Prospect Detail Panel */}
             {selectedProspect && <ProspectDetailPanel prospect={selectedProspect} />}
+
+            {/* Floating AI Chatbot */}
+            <FloatingChatbot userRole="rm" userName="RM User" />
         </div>
     );
 }
