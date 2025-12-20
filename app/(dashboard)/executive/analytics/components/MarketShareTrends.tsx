@@ -8,8 +8,8 @@
 import { Card } from '@/app/components/ui';
 
 const marketShareData = [
-    { city: 'Mumbai', current: 18.5, growth: 1.2, target: 22, color: '#C9A227' },
-    { city: 'Delhi NCR', current: 14.2, growth: 0.8, target: 18, color: '#1E3A5F' },
+    { city: 'Mumbai', current: 18.5, growth: 1.2, target: 22, color: '#E85D54' },
+    { city: 'Delhi NCR', current: 14.2, growth: 0.8, target: 18, color: '#2A2447' },
     { city: 'Bangalore', current: 12.8, growth: 2.1, target: 15, color: '#28A745' },
     { city: 'Pune', current: 8.5, growth: 1.5, target: 12, color: '#5A6C7D' },
     { city: 'Chennai', current: 6.2, growth: 0.6, target: 8, color: '#8E99A4' },
@@ -27,7 +27,7 @@ export default function MarketShareTrends() {
                 </div>
                 <div className="text-right">
                     <p className="text-sm text-[#8E99A4]">Overall Market Share</p>
-                    <p className="text-2xl font-bold text-[#C9A227]">12.8%</p>
+                    <p className="text-2xl font-bold text-[#E85D54]">12.8%</p>
                 </div>
             </div>
 
@@ -87,11 +87,11 @@ export default function MarketShareTrends() {
                         <span>Bangalore showing strongest growth (+2.1%) - increase marketing investment</span>
                     </li>
                     <li className="flex items-start gap-2">
-                        <span className="text-[#C9A227]">→</span>
+                        <span className="text-[#E85D54]">→</span>
                         <span>Mumbai at 18.5% - closest to market leadership (top player: 22%)</span>
                     </li>
                     <li className="flex items-start gap-2">
-                        <span className="text-[#1E3A5F]">📈</span>
+                        <span className="text-[#2A2447]">📈</span>
                         <span>Chennai underperforming - consider hiring additional senior RMs</span>
                     </li>
                 </ul>

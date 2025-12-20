@@ -9,8 +9,8 @@ import { Card } from '@/app/components/ui';
 
 const revenueData = [
     { source: 'Referrals', revenue: 450, percentage: 35, color: '#28A745' },
-    { source: 'Events', revenue: 320, percentage: 25, color: '#C9A227' },
-    { source: 'Digital Marketing', revenue: 256, percentage: 20, color: '#1E3A5F' },
+    { source: 'Events', revenue: 320, percentage: 25, color: '#E85D54' },
+    { source: 'Digital Marketing', revenue: 256, percentage: 20, color: '#2A2447' },
     { source: 'Partnerships', revenue: 192, percentage: 15, color: '#5A6C7D' },
     { source: 'Direct', revenue: 64, percentage: 5, color: '#8E99A4' },
 ];

@@ -10,9 +10,9 @@ import { Card } from '@/app/components/ui';
 const funnelStages = [
     { stage: 'Prospecting', count: 47, percentage: 100, color: '#8E99A4' },
     { stage: 'Contacted', count: 32, percentage: 68, color: '#5A6C7D', conversionFromPrev: 68 },
-    { stage: 'Qualified', count: 20, percentage: 43, color: '#1E3A5F', conversionFromPrev: 63 },
-    { stage: 'Proposal', count: 12, percentage: 26, color: '#C9A227', conversionFromPrev: 60 },
-    { stage: 'Closing', count: 8, percentage: 17, color: '#B8911F', conversionFromPrev: 67 },
+    { stage: 'Qualified', count: 20, percentage: 43, color: '#2A2447', conversionFromPrev: 63 },
+    { stage: 'Proposal', count: 12, percentage: 26, color: '#E85D54', conversionFromPrev: 60 },
+    { stage: 'Closing', count: 8, percentage: 17, color: '#D64D44', conversionFromPrev: 67 },
     { stage: 'Won', count: 5, percentage: 11, color: '#28A745', conversionFromPrev: 63 },
 ];
 
@@ -84,7 +84,7 @@ export default function ConversionFunnel() {
                         <span>Contacted to Qualified stage has room for improvement (63% vs team avg 70%)</span>
                     </li>
                     <li className="flex items-start gap-2">
-                        <span className="text-[#1E3A5F] mt-1">📊</span>
+                        <span className="text-[#2A2447] mt-1">📊</span>
                         <span>Top performers convert 75%+ from Contacted to Qualified - review their qualification criteria</span>
                     </li>
                 </ul>

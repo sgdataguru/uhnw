@@ -75,7 +75,7 @@ export default function ExecutiveAnalyticsPage() {
                                     Market Share (Mumbai)
                                 </span>
                                 <div className="flex items-baseline gap-2 mt-2">
-                                    <span className="text-3xl font-bold text-[#C9A227]">18.5%</span>
+                                    <span className="text-3xl font-bold text-[#E85D54]">18.5%</span>
                                 </div>
                                 <span className="text-xs text-[#28A745] mt-2">↑ 1.2% vs last year</span>
                             </div>
@@ -102,7 +102,7 @@ export default function ExecutiveAnalyticsPage() {
                                         <span className="text-sm font-semibold text-[#1A1A2E]">68%</span>
                                     </div>
                                     <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
-                                        <div className="h-full bg-gradient-to-r from-[#C9A227] to-[#D4AF37]" style={{ width: '68%' }} />
+                                        <div className="h-full bg-gradient-to-r from-[#E85D54] to-[#F06E66]" style={{ width: '68%' }} />
                                     </div>
                                     <p className="text-xs text-[#28A745] mt-1">↑ 5% vs last quarter</p>
                                 </div>
@@ -113,7 +113,7 @@ export default function ExecutiveAnalyticsPage() {
                                         <span className="text-sm font-semibold text-[#1A1A2E]">2.4</span>
                                     </div>
                                     <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
-                                        <div className="h-full bg-gradient-to-r from-[#1E3A5F] to-[#5A6C7D]" style={{ width: '48%' }} />
+                                        <div className="h-full bg-gradient-to-r from-[#2A2447] to-[#5A6C7D]" style={{ width: '48%' }} />
                                     </div>
                                     <p className="text-xs text-[#5A6C7D] mt-1">Target: 3.0 products</p>
                                 </div>
@@ -185,7 +185,7 @@ export default function ExecutiveAnalyticsPage() {
                                     <span>Monitor RM satisfaction scores - consider retention bonuses for top performers</span>
                                 </li>
                                 <li className="flex items-start gap-2">
-                                    <span className="text-[#1E3A5F]">📊</span>
+                                    <span className="text-[#2A2447]">📊</span>
                                     <span>Pipeline coverage strong - maintain current lead generation investment</span>
                                 </li>
                             </ul>

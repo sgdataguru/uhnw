@@ -37,14 +37,14 @@ export default function TeamLeaderboard({ topRMs, isLoading }: TeamLeaderboardPr
                 {topRMs.map((rm, index) => (
                     <div
                         key={rm.rmId}
-                        className="flex items-center gap-4 p-4 rounded-lg border border-gray-200 hover:border-[#C9A227] transition-colors"
+                        className="flex items-center gap-4 p-4 rounded-lg border border-gray-200 hover:border-[#E85D54] transition-colors"
                     >
                         {/* Rank Badge */}
                         <div
                             className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${index === 0
-                                    ? 'bg-[#C9A227]'
+                                    ? 'bg-[#E85D54]'
                                     : index === 1
-                                        ? 'bg-[#D4AF37]'
+                                        ? 'bg-[#F06E66]'
                                         : index === 2
                                             ? 'bg-[#8E99A4]'
                                             : 'bg-[#5A6C7D]'

@@ -26,7 +26,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center">
       <div className="flex flex-col items-center gap-4">
-        <svg className="w-16 h-16 animate-spin text-[#C9A227]" viewBox="0 0 24 24">
+        <svg className="w-16 h-16 animate-spin text-[#E85D54]" viewBox="0 0 24 24">
           <circle
             className="opacity-25"
             cx="12"

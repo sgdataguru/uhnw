@@ -43,8 +43,8 @@ export default function TeamComparisonTable() {
                                 <td className="py-3 px-4">
                                     <div className="flex items-center gap-3">
                                         {index < 3 && (
-                                            <span className={`text-lg ${index === 0 ? 'text-[#C9A227]' :
-                                                    index === 1 ? 'text-[#D4AF37]' :
+                                            <span className={`text-lg ${index === 0 ? 'text-[#E85D54]' :
+                                                    index === 1 ? 'text-[#F06E66]' :
                                                         'text-[#8E99A4]'
                                                 }`}>
                                                 {index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'}

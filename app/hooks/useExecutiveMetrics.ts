@@ -56,11 +56,11 @@ const MOCK_EXECUTIVE_METRICS: ExecutiveMetrics = {
 
     // Product mix
     productMix: [
-        { product: 'Equity PMS', percentage: 35, value: '₹1.61 L Cr', color: '#1E3A5F' },
-        { product: 'Mutual Funds', percentage: 28, value: '₹1.29 L Cr', color: '#C9A227' },
+        { product: 'Equity PMS', percentage: 35, value: '₹1.61 L Cr', color: '#2A2447' },
+        { product: 'Mutual Funds', percentage: 28, value: '₹1.29 L Cr', color: '#E85D54' },
         { product: 'Fixed Income', percentage: 18, value: '₹82,800 Cr', color: '#5A6C7D' },
         { product: 'Alternative Investments', percentage: 12, value: '₹55,200 Cr', color: '#8E99A4' },
-        { product: 'Others', percentage: 7, value: '₹32,200 Cr', color: '#D4AF37' },
+        { product: 'Others', percentage: 7, value: '₹32,200 Cr', color: '#F06E66' },
     ],
 
     // AUM trend (last 12 months)

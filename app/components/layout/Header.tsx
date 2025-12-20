@@ -38,20 +38,22 @@ export default function Header({ userName, userInitials }: HeaderProps) {
   const displayInitials = userInitials || userProfile.name.split(' ').map(n => n[0]).join('');
 
   return (
-    <header className="h-16 bg-[#0A1628] px-6 flex items-center justify-between sticky top-0 z-50">
+    <header className="h-16 bg-[#1A1332] px-6 flex items-center justify-between sticky top-0 z-50">
       {/* Logo */}
       <div className="flex items-center gap-3">
-        <div className="text-white font-bold text-xl tracking-wider">
-          <span className="text-[#C9A227]">UHNW</span>
-        </div>
+        <img
+          src="/nuvamalogo.jpg"
+          alt="Nuvama Wealth"
+          className="h-10 object-contain"
+        />
 
         {/* Role Badge */}
         <div className="relative">
           <button
             onClick={() => setShowRoleMenu(!showRoleMenu)}
-            className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#1E3A5F] hover:bg-[#2C4A6F] transition-colors"
+            className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#2A2447] hover:bg-[#3A3557] transition-colors"
           >
-            <span className="text-xs font-medium text-[#C9A227]">
+            <span className="text-xs font-medium text-[#E85D54]">
               {role === 'rm' ? 'RM' : role === 'executive' ? 'Executive' : 'Admin'}
             </span>
             <svg className="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -102,7 +104,7 @@ export default function Header({ userName, userInitials }: HeaderProps) {
             placeholder="Search prospects..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-[#1E3A5F] border border-[#2C4A6F] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#C9A227] transition-colors"
+            className="w-full pl-10 pr-4 py-2 bg-[#2A2447] border border-[#3A3557] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#E85D54] transition-colors"
           />
         </div>
       </div>
@@ -119,7 +121,7 @@ export default function Header({ userName, userInitials }: HeaderProps) {
               d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
             />
           </svg>
-          <span className="absolute top-1 right-1 w-2 h-2 bg-[#C9A227] rounded-full" />
+          <span className="absolute top-1 right-1 w-2 h-2 bg-[#E85D54] rounded-full" />
         </button>
 
         {/* Settings */}
@@ -141,7 +143,7 @@ export default function Header({ userName, userInitials }: HeaderProps) {
         </button>
 
         {/* User Menu */}
-        <div className="flex items-center gap-3 pl-4 border-l border-[#2C4A6F]">
+        <div className="flex items-center gap-3 pl-4 border-l border-[#3A3557]">
           <Avatar initials={displayInitials} size="sm" />
           <div className="hidden md:block">
             <p className="text-white text-sm font-medium">{displayName}</p>

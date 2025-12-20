@@ -29,7 +29,7 @@ export default function ExecutiveActionCenter({ recentTasks }: ExecutiveActionCe
                     </h3>
                     <button
                         onClick={() => setShowAssignModal(true)}
-                        className="px-4 py-2 bg-[#C9A227] text-white rounded-lg hover:bg-[#B8911F] transition-colors font-medium"
+                        className="px-4 py-2 bg-[#E85D54] text-white rounded-lg hover:bg-[#D64D44] transition-colors font-medium"
                     >
                         + Assign Task to RM
                     </button>
@@ -42,7 +42,7 @@ export default function ExecutiveActionCenter({ recentTasks }: ExecutiveActionCe
                         <p className="text-sm text-[#5A6C7D] mt-1">Pending</p>
                     </div>
                     <div className="text-center p-4 bg-[#E3F2FD] rounded-lg">
-                        <p className="text-2xl font-bold text-[#1E3A5F]">{inProgressTasks}</p>
+                        <p className="text-2xl font-bold text-[#2A2447]">{inProgressTasks}</p>
                         <p className="text-sm text-[#5A6C7D] mt-1">In Progress</p>
                     </div>
                     <div className="text-center p-4 bg-[#FFEBEE] rounded-lg">
@@ -56,7 +56,7 @@ export default function ExecutiveActionCenter({ recentTasks }: ExecutiveActionCe
                     <h4 className="font-semibold text-[#1A1A2E] mb-4">Recent Assignments</h4>
                     <div className="space-y-3">
                         {recentTasks.slice(0, 5).map((task) => (
-                            <div key={task.id} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:border-[#C9A227] transition-colors">
+                            <div key={task.id} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:border-[#E85D54] transition-colors">
                                 <div className="flex-1">
                                     <p className="font-medium text-[#1A1A2E]">{task.title}</p>
                                     <p className="text-sm text-[#5A6C7D] mt-1">
@@ -97,7 +97,7 @@ export default function ExecutiveActionCenter({ recentTasks }: ExecutiveActionCe
                                 <label className="block text-sm font-medium text-[#1A1A2E] mb-2">
                                     Select RM
                                 </label>
-                                <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227]">
+                                <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E85D54]">
                                     <option>Priya Sharma</option>
                                     <option>Vikram Singh</option>
                                     <option>Anita Patel</option>
@@ -110,7 +110,7 @@ export default function ExecutiveActionCenter({ recentTasks }: ExecutiveActionCe
                                 <label className="block text-sm font-medium text-[#1A1A2E] mb-2">
                                     Task Type
                                 </label>
-                                <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227]">
+                                <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E85D54]">
                                     <option value="followup">Follow-up Call</option>
                                     <option value="proposal">Prepare Proposal</option>
                                     <option value="review">Client Review</option>
@@ -124,7 +124,7 @@ export default function ExecutiveActionCenter({ recentTasks }: ExecutiveActionCe
                                 <label className="block text-sm font-medium text-[#1A1A2E] mb-2">
                                     Priority
                                 </label>
-                                <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227]">
+                                <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E85D54]">
                                     <option value="high">High</option>
                                     <option value="medium">Medium</option>
                                     <option value="low">Low</option>
@@ -137,7 +137,7 @@ export default function ExecutiveActionCenter({ recentTasks }: ExecutiveActionCe
                                 </label>
                                 <input
                                     type="date"
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227]"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E85D54]"
                                 />
                             </div>
 
@@ -148,7 +148,7 @@ export default function ExecutiveActionCenter({ recentTasks }: ExecutiveActionCe
                                 <textarea
                                     rows={3}
                                     placeholder="Add context or instructions..."
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227]"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E85D54]"
                                 />
                             </div>
                         </div>
@@ -166,7 +166,7 @@ export default function ExecutiveActionCenter({ recentTasks }: ExecutiveActionCe
                                     alert('Task assigned successfully! (POC demo)');
                                     setShowAssignModal(false);
                                 }}
-                                className="px-6 py-2 bg-[#C9A227] text-white rounded-lg hover:bg-[#B8911F] transition-colors"
+                                className="px-6 py-2 bg-[#E85D54] text-white rounded-lg hover:bg-[#D64D44] transition-colors"
                             >
                                 Assign Task
                             </button>

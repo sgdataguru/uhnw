@@ -6,13 +6,15 @@
 'use client';
 
 import { Header, Sidebar } from '@/app/components/layout';
-import ExecutiveHeroMetrics from './components/ExecutiveHeroMetrics';
+import EnhancedExecutiveHeroMetrics from './components/EnhancedExecutiveHeroMetrics';
 import TeamLeaderboard from './components/TeamLeaderboard';
-import ProductMixChart from './components/ProductMixChart';
+import ProductMixByClient from './components/ProductMixByClient';
+import ProspectiveProductsByLead from './components/ProspectiveProductsByLead';
 import AUMTrendChart from './components/AUMTrendChart';
 import RegionalBreakdown from './components/RegionalBreakdown';
 import ExecutiveActionCenter from './components/ExecutiveActionCenter';
-import { useExecutiveMetrics } from '@/app/hooks/useExecutiveMetrics';
+import LiquidityTriggersPanel from './components/LiquidityTriggersPanel';
+import { useEnhancedExecutiveMetrics } from '@/app/hooks/useEnhancedExecutiveMetrics';
 import type { RMTask } from '@/types';
 
 // Mock recent RM tasks
@@ -22,7 +24,7 @@ const mockRMTasks: RMTask[] = [
         assignedTo: 'rm-001',
         assignedToName: 'Priya Sharma',
         assignedBy: 'exec-001',
-        assignedByName: 'Ashish Kehair',
+        assignedByName: 'Amit Saxena',
         prospectId: 'p-123',
         prospectName: 'Tech Innovations Pvt Ltd',
         taskType: 'followup',
@@ -38,7 +40,7 @@ const mockRMTasks: RMTask[] = [
         assignedTo: 'rm-002',
         assignedToName: 'Vikram Singh',
         assignedBy: 'exec-001',
-        assignedByName: 'Ashish Kehair',
+        assignedByName: 'Amit Saxena',
         taskType: 'proposal',
         priority: 'high',
         dueDate: new Date('2024-12-20'),
@@ -52,7 +54,7 @@ const mockRMTasks: RMTask[] = [
         assignedTo: 'rm-003',
         assignedToName: 'Anita Patel',
         assignedBy: 'exec-001',
-        assignedByName: 'Ashish Kehair',
+        assignedByName: 'Amit Saxena',
         taskType: 'review',
         priority: 'medium',
         dueDate: new Date('2024-12-15'),
@@ -66,7 +68,7 @@ const mockRMTasks: RMTask[] = [
         assignedTo: 'rm-001',
         assignedToName: 'Priya Sharma',
         assignedBy: 'exec-001',
-        assignedByName: 'Ashish Kehair',
+        assignedByName: 'Amit Saxena',
         taskType: 'cross_sell',
         priority: 'medium',
         dueDate: new Date('2024-12-25'),
@@ -80,7 +82,7 @@ const mockRMTasks: RMTask[] = [
         assignedTo: 'rm-004',
         assignedToName: 'Rajesh Kumar',
         assignedBy: 'exec-001',
-        assignedByName: 'Ashish Kehair',
+        assignedByName: 'Amit Saxena',
         taskType: 'prospect_call',
         priority: 'low',
         dueDate: new Date('2024-12-28'),
@@ -93,7 +95,7 @@ const mockRMTasks: RMTask[] = [
 ];
 
 export default function ExecutiveDashboard() {
-    const { metrics, isLoading } = useExecutiveMetrics();
+    const { metrics, isLoading, liquidityTriggers } = useEnhancedExecutiveMetrics();
 
     return (
         <div className="min-h-screen bg-[#F8F9FA]">
@@ -106,20 +108,30 @@ export default function ExecutiveDashboard() {
                     {/* Welcome Section */}
                     <div className="mb-8">
                         <h1 className="text-3xl font-bold text-[#1A1A2E] font-[family-name:var(--font-playfair)]">
-                            Executive Dashboard
+                            Managing Director - Artificial Intelligence Hub
                         </h1>
                         <p className="text-[#5A6C7D] mt-1">
-                            Firm-wide performance and strategic insights
+                            Amit Saxena • Northern Region Performance & Strategic Insights
                         </p>
                     </div>
 
-                    {/* Hero Metrics */}
-                    <ExecutiveHeroMetrics metrics={metrics} isLoading={isLoading} />
+                    {/* Enhanced Hero Metrics - 10 Clickable Cards */}
+                    <EnhancedExecutiveHeroMetrics metrics={metrics} isLoading={isLoading} />
 
-                    {/* Charts Row */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    {/* Liquidity Triggers Panel - Priority Position */}
+                    <div className="mb-8">
+                        <LiquidityTriggersPanel triggers={liquidityTriggers || []} isLoading={isLoading} />
+                    </div>
+
+                    {/* AUM Trend - Full Width */}
+                    <div className="mb-8">
                         <AUMTrendChart data={metrics?.aumTrend} isLoading={isLoading} />
-                        <ProductMixChart data={metrics?.productMix} isLoading={isLoading} />
+                    </div>
+
+                    {/* Product Mix Components - Side by Side */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                        <ProductMixByClient isLoading={isLoading} />
+                        <ProspectiveProductsByLead isLoading={isLoading} />
                     </div>
 
                     {/* Action Center */}

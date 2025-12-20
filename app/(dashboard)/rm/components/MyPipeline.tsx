@@ -11,8 +11,8 @@ import type { PipelineStage } from '@/types';
 const mockPipelineData: PipelineStage[] = [
     { stage: 'Prospecting', count: 12, value: '₹54 Cr', color: '#8E99A4' },
     { stage: 'Contacted', count: 8, value: '₹42 Cr', color: '#5A6C7D' },
-    { stage: 'Qualified', count: 5, value: '₹28 Cr', color: '#1E3A5F' },
-    { stage: 'Proposal', count: 3, value: '₹18 Cr', color: '#C9A227' },
+    { stage: 'Qualified', count: 5, value: '₹28 Cr', color: '#2A2447' },
+    { stage: 'Proposal', count: 3, value: '₹18 Cr', color: '#E85D54' },
     { stage: 'Closing', count: 2, value: '₹12 Cr', color: '#28A745' },
 ];
 

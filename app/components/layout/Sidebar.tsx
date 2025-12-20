@@ -51,7 +51,7 @@ export default function Sidebar({ activePage = 'home' }: SidebarProps) {
             className={`
               flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200
               ${activePage === item.id
-                ? 'bg-[#0A1628] text-white'
+                ? 'bg-[#1A1332] text-white'
                 : 'text-[#5A6C7D] hover:bg-[#F8F9FA] hover:text-[#1A1A2E]'
               }
             `}
@@ -81,7 +81,7 @@ export default function Sidebar({ activePage = 'home' }: SidebarProps) {
           <select
             value={selectedCity}
             onChange={(e) => setSelectedCity(e.target.value)}
-            className="w-full px-3 py-2 bg-[#F8F9FA] border border-gray-200 rounded-lg text-[#1A1A2E] focus:outline-none focus:border-[#1E3A5F] transition-colors"
+            className="w-full px-3 py-2 bg-[#F8F9FA] border border-gray-200 rounded-lg text-[#1A1A2E] focus:outline-none focus:border-[#2A2447] transition-colors"
           >
             {cities.map((city) => (
               <option key={city} value={city}>{city}</option>
@@ -97,7 +97,7 @@ export default function Sidebar({ activePage = 'home' }: SidebarProps) {
           <select
             value={selectedSector}
             onChange={(e) => setSelectedSector(e.target.value)}
-            className="w-full px-3 py-2 bg-[#F8F9FA] border border-gray-200 rounded-lg text-[#1A1A2E] focus:outline-none focus:border-[#1E3A5F] transition-colors"
+            className="w-full px-3 py-2 bg-[#F8F9FA] border border-gray-200 rounded-lg text-[#1A1A2E] focus:outline-none focus:border-[#2A2447] transition-colors"
           >
             {sectors.map((sector) => (
               <option key={sector} value={sector}>{sector}</option>

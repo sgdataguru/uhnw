@@ -48,7 +48,7 @@ export default function RegionalBreakdown({ regions, isLoading }: RegionalBreakd
                         {/* Progress bar */}
                         <div className="relative w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-2">
                             <div
-                                className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#1E3A5F] to-[#C9A227] transition-all"
+                                className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#2A2447] to-[#E85D54] transition-all"
                                 style={{
                                     width: `${(parseFloat(region.aum.replace(/[₹,\sCrLKk]/g, '')) / totalAUM) * 100}%`,
                                 }}

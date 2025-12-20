@@ -240,7 +240,7 @@ export default function NetworkPage() {
               <p className="text-red-600 mb-4">{error}</p>
               <button
                 onClick={() => window.location.reload()}
-                className="px-4 py-2 bg-[#1E3A5F] text-white rounded-lg hover:bg-[#0A1628]"
+                className="px-4 py-2 bg-[#2A2447] text-white rounded-lg hover:bg-[#1A1332]"
               >
                 Retry
               </button>
@@ -271,7 +271,7 @@ export default function NetworkPage() {
           {isLoading ? (
             <div className="absolute inset-0 flex items-center justify-center bg-white">
               <div className="text-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1E3A5F] mx-auto mb-4"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2A2447] mx-auto mb-4"></div>
                 <p className="text-gray-600">Loading relationship graph...</p>
               </div>
             </div>

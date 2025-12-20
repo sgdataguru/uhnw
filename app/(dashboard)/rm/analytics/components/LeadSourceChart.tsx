@@ -9,8 +9,8 @@ import { Card } from '@/app/components/ui';
 
 const leadSources = [
     { source: 'Referrals', count: 15, conversionRate: 40, avgDealSize: '₹380 Cr', roi: 'High', color: '#28A745' },
-    { source: 'Events', count: 6, conversionRate: 33, avgDealSize: '₹410 Cr', roi: 'High', color: '#C9A227' },
-    { source: 'LinkedIn', count: 8, conversionRate: 25, avgDealSize: '₹220 Cr', roi: 'Medium', color: '#1E3A5F' },
+    { source: 'Events', count: 6, conversionRate: 33, avgDealSize: '₹410 Cr', roi: 'High', color: '#E85D54' },
+    { source: 'LinkedIn', count: 8, conversionRate: 25, avgDealSize: '₹220 Cr', roi: 'Medium', color: '#2A2447' },
     { source: 'Cold Outreach', count: 12, conversionRate: 8, avgDealSize: '₹150 Cr', roi: 'Low', color: '#8E99A4' },
     { source: 'Website', count: 6, conversionRate: 17, avgDealSize: '₹190 Cr', roi: 'Medium', color: '#5A6C7D' },
 ];
@@ -88,7 +88,7 @@ export default function LeadSourceChart() {
                         <span><strong>Double down on referrals:</strong> 40% conversion rate with high deal sizes. Ask satisfied clients for introductions.</span>
                     </li>
                     <li className="flex items-start gap-2">
-                        <span className="text-[#C9A227] font-bold">2.</span>
+                        <span className="text-[#E85D54] font-bold">2.</span>
                         <span><strong>Prioritize events:</strong> Second-best conversion (33%) and highest average deal size (₹410 Cr).</span>
                     </li>
                     <li className="flex items-start gap-2">

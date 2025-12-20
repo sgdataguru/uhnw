@@ -673,3 +673,220 @@ export interface ExecutiveAlert {
   resolvedAt?: Date;
 }
 
+// ============================================
+// ENHANCED EXECUTIVE DASHBOARD - NUVAMA
+// ============================================
+
+// Nuvama Product Categories
+export type NuvamaProduct =
+  | 'PMS'
+  | 'Equities'
+  | 'Fixed Income'
+  | 'Structured Products'
+  | 'Alternative Investments'
+  | 'Mutual Funds'
+  | 'Insurance'
+  | 'Commodities'
+  | 'Currency'
+  | 'Real Estate';
+
+// Liquidity Event Types
+export type LiquidityEventType =
+  | 'lock_in_expiry'
+  | 'bond_maturity'
+  | 'mutual_fund_redemption'
+  | 'property_sale'
+  | 'business_exit'
+  | 'dividend_payout'
+  | 'esop_vesting'
+  | 'ipo_listing'
+  | 'acquisition_exit';
+
+// Liquidity Trigger Status
+export type LiquidityTriggerStatus =
+  | 'upcoming'
+  | 'engaged'
+  | 'proposal_sent'
+  | 'closed'
+  | 'missed';
+
+// Liquidity Trigger Event
+export interface LiquidityTrigger {
+  id: string;
+  clientId: string;
+  clientName: string;
+  clientCode: string;
+  eventType: LiquidityEventType;
+  amount: number;
+  eventDate: Date;
+  daysUntilEvent: number;
+  dataSource: string;
+  probability: number; // 0-100
+  confidenceLevel: 'high' | 'medium' | 'low';
+  recommendedActions: string[];
+  recommendedProducts: NuvamaProduct[];
+  assignedRM: string;
+  assignedRMName: string;
+  status: LiquidityTriggerStatus;
+  notes?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Timeline Filter for Liquidity Triggers
+export type LiquidityTimelineFilter = '0-30' | '31-90' | '91-180' | '181-365' | 'all';
+
+// Enhanced Lead Score with Ranking
+export interface EnhancedLeadScore {
+  leadId: string;
+  rank: number; // 1-based ranking
+  totalLeads: number; // Total leads in system
+  overallScore: number; // 0-100
+  breakdown: {
+    financialProfile: number; // 0-30
+    engagementLevel: number; // 0-25
+    propensityToConvert: number; // 0-20
+    revenuePotential: number; // 0-15
+    strategicValue: number; // 0-10
+  };
+  tier: 'gold' | 'silver' | 'bronze' | 'standard';
+  lastCalculated: Date;
+}
+
+// Product Mix by Client
+export interface ClientProductMix {
+  clientId: string;
+  clientName: string;
+  clientCode: string;
+  totalAUM: number;
+  region: string;
+  assignedRM: string;
+  products: {
+    category: NuvamaProduct;
+    aum: number;
+    percentage: number;
+    lastUpdated: Date;
+  }[];
+  lastReviewDate: Date;
+}
+
+// Prospective Product for Leads
+export interface ProspectiveProductMix {
+  leadId: string;
+  leadName: string;
+  estimatedNetWorth: number;
+  riskProfile: 'conservative' | 'moderate' | 'aggressive';
+  recommendedProducts: {
+    category: NuvamaProduct;
+    recommendationScore: number; // 0-100
+    expectedAllocation: number; // Amount
+    probability: number; // 0-100
+    rationale: string;
+  }[];
+  totalExpectedAUM: number;
+  assignedRM: string;
+}
+
+// AUM Source/Flow Data
+export interface AUMFlowSource {
+  source: string;
+  amount: number;
+  percentage: number;
+  trend: 'increasing' | 'stable' | 'decreasing';
+  topContributors: {
+    name: string;
+    amount: number;
+  }[];
+}
+
+// Drill-Down Modal View Type
+export type DrillDownView =
+  | 'product_mix_by_client'
+  | 'aum_sources'
+  | 'target_vs_actual'
+  | 'rm_performance'
+  | 'lead_details'
+  | 'client_list'
+  | 'closure_timeline'
+  | 'churn_analysis';
+
+// Drill-Down Modal Data
+export interface DrillDownModalData {
+  view: DrillDownView;
+  title: string;
+  subtitle?: string;
+  data: unknown; // Flexible data structure based on view type
+  exportable: boolean;
+  tabs?: string[];
+  dataSource?: string;
+}
+
+// RM Performance Detail
+export interface RMPerformanceDetail extends RMPerformance {
+  targetAUM: number;
+  achievementRate: number; // percentage
+  leadsAssigned: number;
+  leadsConverted: number;
+  conversionRate: number; // percentage
+  avgLeadTimeToClose: number; // days
+  churnRate: number; // percentage
+  region: string;
+  productsOffered: NuvamaProduct[];
+}
+
+// Churn Score Data
+export interface ChurnScore {
+  clientId: string;
+  clientName: string;
+  score: number; // 0-100 (higher = higher risk)
+  riskLevel: 'critical' | 'high' | 'medium' | 'low';
+  factors: {
+    factor: string;
+    weight: number;
+    contribution: number;
+  }[];
+  recommendedActions: string[];
+  assignedRM: string;
+  lastUpdated: Date;
+}
+
+// Northern Region Cities
+export const NORTHERN_CITIES = [
+  'Delhi',
+  'Noida',
+  'Gurgaon',
+  'Ghaziabad',
+  'Chandigarh',
+  'Jaipur',
+  'Lucknow',
+  'Dehradun',
+  'Shimla',
+  'Amritsar',
+  'Ludhiana',
+  'Kanpur',
+  'Agra',
+  'Faridabad',
+  'Panchkula'
+] as const;
+
+export type NorthernCity = typeof NORTHERN_CITIES[number];
+
+// Enhanced Executive Metrics with new fields
+export interface EnhancedExecutiveMetrics extends ExecutiveMetrics {
+  // New metrics from client feedback
+  targetAUM: string;
+  aumPerRM: string;
+  totalLeads: number;
+  targetLeadsPerQuarter: number;
+  totalUHNWClients: number;
+  avgLeadTimeToClosurePerRM: number; // days
+  avgChurnScore: number; // 0-100
+
+  // Drill-down data
+  aumFlowSources?: AUMFlowSource[];
+  clientProductMix?: ClientProductMix[];
+  prospectiveProducts?: ProspectiveProductMix[];
+  liquidityTriggers?: LiquidityTrigger[];
+  rmPerformanceDetails?: RMPerformanceDetail[];
+  churnScores?: ChurnScore[];
+}

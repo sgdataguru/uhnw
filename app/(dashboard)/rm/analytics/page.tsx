@@ -77,7 +77,7 @@ export default function RMAnalyticsPage() {
                                     Best Lead Source
                                 </span>
                                 <div className="flex items-baseline gap-2 mt-2">
-                                    <span className="text-xl font-bold text-[#C9A227]">Referrals</span>
+                                    <span className="text-xl font-bold text-[#E85D54]">Referrals</span>
                                 </div>
                                 <span className="text-xs text-[#5A6C7D] mt-2">40% conversion rate</span>
                             </div>
@@ -113,7 +113,7 @@ export default function RMAnalyticsPage() {
                                     <p className="text-sm text-[#5A6C7D] mt-1">
                                         No activity in 14+ days. Total value: ₹85 Cr
                                     </p>
-                                    <button className="text-sm text-[#C9A227] font-medium mt-2 hover:underline">
+                                    <button className="text-sm text-[#E85D54] font-medium mt-2 hover:underline">
                                         Review Now →
                                     </button>
                                 </div>

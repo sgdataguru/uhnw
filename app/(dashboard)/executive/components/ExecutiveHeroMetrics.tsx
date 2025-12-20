@@ -31,13 +31,13 @@ export default function ExecutiveHeroMetrics({ metrics, isLoading }: ExecutiveHe
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {/* Firm AUM */}
-            <Card className="bg-gradient-to-br from-[#0A1628] to-[#1E3A5F]">
+            <Card className="bg-gradient-to-br from-[#1A1332] to-[#2A2447]">
                 <div className="flex flex-col">
                     <span className="text-xs font-semibold text-gray-300 uppercase tracking-wider">
                         Firm AUM
                     </span>
                     <div className="flex items-baseline gap-2 mt-2">
-                        <span className="text-3xl font-bold text-[#C9A227]">
+                        <span className="text-3xl font-bold text-[#E85D54]">
                             {metrics.totalAum}
                         </span>
                     </div>

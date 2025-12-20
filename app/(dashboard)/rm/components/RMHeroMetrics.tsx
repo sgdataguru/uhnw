@@ -37,7 +37,7 @@ export default function RMHeroMetrics({ metrics, isLoading }: RMHeroMetricsProps
                         My Clients AUM
                     </span>
                     <div className="flex items-baseline gap-2 mt-2">
-                        <span className="text-3xl font-bold text-[#C9A227]">
+                        <span className="text-3xl font-bold text-[#E85D54]">
                             {metrics.myClientsAum}
                         </span>
                     </div>
