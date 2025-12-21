@@ -167,7 +167,7 @@ export default function AIInsightsPanel() {
             <div className="flex items-center justify-between mb-6">
                 <div>
                     <h3 className="text-xl font-semibold text-[#1A1A2E] font-[family-name:var(--font-playfair)]">
-                        🤖 AI-Powered Strategic Insights
+                        AI-Powered Strategic Insights
                     </h3>
                     <p className="text-sm text-[#5A6C7D] mt-1">
                         Machine learning analysis of firm-wide data • Updated every 6 hours
