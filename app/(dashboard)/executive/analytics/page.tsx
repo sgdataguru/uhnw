@@ -11,6 +11,7 @@ import TeamComparisonTable from './components/TeamComparisonTable';
 import RevenueAttributionChart from './components/RevenueAttributionChart';
 import MarketShareTrends from './components/MarketShareTrends';
 
+
 export default function ExecutiveAnalyticsPage() {
     return (
         <div className="min-h-screen bg-[#F8F9FA]">
@@ -143,6 +144,8 @@ export default function ExecutiveAnalyticsPage() {
                     <div className="mb-8">
                         <TeamComparisonTable />
                     </div>
+
+
 
                     {/* Risk Indicators */}
                     <Card padding="lg">

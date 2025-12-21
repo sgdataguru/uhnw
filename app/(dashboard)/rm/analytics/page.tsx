@@ -12,6 +12,7 @@ import ActivityDashboard from './components/ActivityDashboard';
 import LeadSourceChart from './components/LeadSourceChart';
 import WinLossAnalysis from './components/WinLossAnalysis';
 
+
 export default function RMAnalyticsPage() {
     return (
         <div className="min-h-screen bg-[#F8F9FA]">
@@ -99,6 +100,8 @@ export default function RMAnalyticsPage() {
                     <div className="mb-8">
                         <LeadSourceChart />
                     </div>
+
+
 
                     {/* Pipeline Health Alerts */}
                     <Card padding="lg">
