@@ -47,10 +47,10 @@ export default function AIAdviceCard({ suggestion, onAction }: AIAdviceCardProps
         <div className="flex items-center gap-2">
           <span className="text-2xl">{typeIcons[suggestion.type]}</span>
           <div>
-            <h3 className="font-semibold text-[#1A1A2E] text-sm">
+            <h3 className="font-semibold text-[#1A1A2E] text-base">
               {suggestion.clientName}
             </h3>
-            <p className="text-xs text-gray-500">
+            <p className="text-sm text-gray-600">
               {new Date(suggestion.createdAt).toLocaleDateString('en-IN', {
                 month: 'short',
                 day: 'numeric',
@@ -59,7 +59,7 @@ export default function AIAdviceCard({ suggestion, onAction }: AIAdviceCardProps
           </div>
         </div>
         <span
-          className={`px-2 py-1 rounded text-xs font-bold border ${priorityColors[suggestion.priority]}`}
+          className={`px-2 py-1 rounded text-sm font-bold border ${priorityColors[suggestion.priority]}`}
         >
           {priorityLabels[suggestion.priority]}
         </span>
@@ -74,10 +74,10 @@ export default function AIAdviceCard({ suggestion, onAction }: AIAdviceCardProps
 
       {/* Suggested Action */}
       <div className="mb-4 p-3 bg-blue-50 border-l-4 border-blue-400 rounded">
-        <p className="text-xs font-semibold text-blue-900 mb-1">
+        <p className="text-sm font-semibold text-blue-900 mb-1">
           Suggested Action
         </p>
-        <p className="text-sm text-blue-800">
+        <p className="text-base text-blue-900">
           {suggestion.suggestedAction}
         </p>
       </div>
@@ -89,7 +89,7 @@ export default function AIAdviceCard({ suggestion, onAction }: AIAdviceCardProps
             key={index}
             onClick={() => handleAction(button.action)}
             className={`
-              px-3 py-1.5 rounded text-xs font-semibold transition-colors
+              px-3 py-1.5 rounded text-sm font-semibold transition-colors
               ${button.variant === 'primary'
                 ? 'bg-[#E85D54] text-white hover:bg-[#d54d44]'
                 : button.variant === 'secondary'
@@ -105,10 +105,10 @@ export default function AIAdviceCard({ suggestion, onAction }: AIAdviceCardProps
 
       {/* Reasoning (collapsible) */}
       <details className="mt-3">
-        <summary className="text-xs text-gray-500 cursor-pointer hover:text-gray-700">
+        <summary className="text-sm text-gray-600 cursor-pointer hover:text-gray-800">
           Why this suggestion?
         </summary>
-        <p className="text-xs text-gray-600 mt-2 pl-3 border-l-2 border-gray-200">
+        <p className="text-sm text-gray-700 mt-2 pl-3 border-l-2 border-gray-200 leading-relaxed">
           {suggestion.reasoning}
         </p>
       </details>
