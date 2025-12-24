@@ -24,7 +24,7 @@ function CockpitPreviewCard({ title, value, trend, trendValue, priority }: Cockp
   };
 
   return (
-    <div 
+    <div
       className={`
         backdrop-blur-md bg-gradient-to-br ${priority ? priorityColors[priority] : 'from-white/5 to-white/10'}
         border ${priority ? priorityColors[priority].split(' ')[2] : 'border-white/20'}
@@ -69,15 +69,15 @@ export default function LoginShell({ children }: { children: React.ReactNode }) 
                 />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-heading)' }}>
+                <h1 className="text-2xl font-bold !text-white font-[family-name:var(--font-playfair)]">
                   Nuvama Wealth
                 </h1>
-                <p className="text-sm text-white/70">Management Limited</p>
+                <p className="text-sm text-white/90 font-medium">Wealth Intelligence Hub — Cockpit</p>
               </div>
             </div>
 
             <div className="mt-8 space-y-3">
-              <h2 className="text-4xl font-bold text-white leading-tight" style={{ fontFamily: 'var(--font-heading)' }}>
+              <h2 className="text-4xl font-bold !text-white leading-tight font-[family-name:var(--font-playfair)]">
                 Wealth Intelligence Hub
               </h2>
               <div className="flex items-center gap-3">
@@ -171,10 +171,10 @@ export default function LoginShell({ children }: { children: React.ReactNode }) 
             />
           </div>
           <div>
-            <div className="text-lg font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-heading)' }}>
+            <div className="text-lg font-bold text-[var(--text-primary)] font-[family-name:var(--font-playfair)]">
               Nuvama Wealth
             </div>
-            <div className="text-xs text-[var(--text-muted)]">Cockpit</div>
+            <div className="text-xs text-[var(--text-muted)]">Wealth Intelligence Hub — Cockpit</div>
           </div>
         </div>
 

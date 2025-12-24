@@ -24,6 +24,7 @@ const MOCK_CLIENT_PRODUCT_MIX: ClientProductMix[] = [
         totalAUM: 450000000,
         region: 'Delhi NCR',
         assignedRM: 'Priya Sharma',
+        assignedRMEmail: 'priya.sharma@nuvama.com',
         products: [
             { category: 'PMS', aum: 180000000, percentage: 40, lastUpdated: new Date() },
             { category: 'Equities', aum: 112500000, percentage: 25, lastUpdated: new Date() },
@@ -39,6 +40,7 @@ const MOCK_CLIENT_PRODUCT_MIX: ClientProductMix[] = [
         totalAUM: 320000000,
         region: 'Delhi NCR',
         assignedRM: 'Vikram Singh',
+        assignedRMEmail: 'vikram.singh@nuvama.com',
         products: [
             { category: 'Fixed Income', aum: 128000000, percentage: 40, lastUpdated: new Date() },
             { category: 'PMS', aum: 96000000, percentage: 30, lastUpdated: new Date() },
@@ -54,6 +56,7 @@ const MOCK_CLIENT_PRODUCT_MIX: ClientProductMix[] = [
         totalAUM: 850000000,
         region: 'Jaipur',
         assignedRM: 'Priya Sharma',
+        assignedRMEmail: 'priya.sharma@nuvama.com',
         products: [
             { category: 'Equities', aum: 340000000, percentage: 40, lastUpdated: new Date() },
             { category: 'Alternative Investments', aum: 255000000, percentage: 30, lastUpdated: new Date() },
@@ -159,6 +162,51 @@ export default function ProductMixByClient({ data = MOCK_CLIENT_PRODUCT_MIX, isL
                                 </h4>
                                 <p className="text-sm text-[#5A6C7D]">
                                     {client.region} • RM: {client.assignedRM}
+                                    {client.assignedRMEmail ? (
+                                        <a
+                                            href={`mailto:${client.assignedRMEmail}?subject=Product%20Recommendation%20for%20${encodeURIComponent(client.clientName)}&body=Hi%20${client.assignedRM.split(' ')[0]},%0A%0AI%20noticed%20an%20opportunity%20for%20${encodeURIComponent(client.clientName)}...`}
+                                            className="inline-flex items-center justify-center ml-2 text-gray-400 hover:text-[#E85D54] transition-colors focus:outline-none focus:ring-2 focus:ring-[#E85D54] focus:ring-offset-2 rounded"
+                                            title="Send email recommendation"
+                                            aria-label={`Send email recommendation to ${client.assignedRM}`}
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="16"
+                                                height="16"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                            >
+                                                <rect width="20" height="16" x="2" y="4" rx="2" />
+                                                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                                            </svg>
+                                        </a>
+                                    ) : (
+                                        <span
+                                            className="inline-flex items-center justify-center ml-2 text-gray-300 cursor-not-allowed"
+                                            title="Email not available"
+                                            aria-label="Email not available"
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="16"
+                                                height="16"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                            >
+                                                <rect width="20" height="16" x="2" y="4" rx="2" />
+                                                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                                            </svg>
+                                        </span>
+                                    )}
                                 </p>
                             </div>
                             <div className="text-right">

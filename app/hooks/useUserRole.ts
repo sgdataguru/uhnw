@@ -20,8 +20,8 @@ const MOCK_RM_PROFILE: UserProfile = {
 
 const MOCK_EXECUTIVE_PROFILE: UserProfile = {
     id: 'exec-001',
-    name: 'Ashish Kehair',
-    email: 'ashish.kehair@nuvama.com',
+    name: 'Amit Saxena',
+    email: 'amit.saxena@nuvama.com',
     role: 'executive',
     territories: ['Mumbai', 'Delhi', 'Bangalore'],
     teamIds: ['team-west', 'team-north', 'team-south'],

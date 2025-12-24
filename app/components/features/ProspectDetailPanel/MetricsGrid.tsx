@@ -85,8 +85,13 @@ export default function MetricsGrid({ metrics }: MetricsGridProps) {
 
   return (
     <div className="border-b border-[#E5E4E2] pb-6">
-      <h3 className="text-lg font-semibold text-[#1A1A2E] mb-4">Key Metrics</h3>
-      
+      <div className="flex items-center gap-2 mb-4">
+        <h3 className="text-lg font-semibold text-[#1A1A2E]">Key Metrics</h3>
+        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-500 border border-gray-200">
+          POC
+        </span>
+      </div>
+
       <div className="grid grid-cols-2 gap-4">
         {metricsData.map((metric, index) => (
           <div
@@ -105,6 +110,10 @@ export default function MetricsGrid({ metrics }: MetricsGridProps) {
           </div>
         ))}
       </div>
+
+      <p className="mt-3 text-[10px] text-gray-400 italic">
+        * Internally calculated; can be customized.
+      </p>
     </div>
   );
 }

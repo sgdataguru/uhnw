@@ -17,6 +17,7 @@ interface AIInsight {
     confidence: number; // 0-100
     actionable: boolean;
     suggestedAction?: string;
+    actionBy?: string; // New field for action owner/date
     dataPoints: string[];
     generatedAt: string; // ISO date string
 }
@@ -31,6 +32,7 @@ const mockExecutiveInsights: AIInsight[] = [
         confidence: 87,
         actionable: true,
         suggestedAction: 'Deploy 3 senior RMs to Delhi NCR with targeted outreach campaign. Estimated potential AUM capture: ₹1,340 Cr over 6 months.',
+        actionBy: 'Jan 15, 2025',
         dataPoints: [
             '47 UHNW prospects identified',
             'Avg net worth: ₹285 Cr',
@@ -103,6 +105,7 @@ const mockExecutiveInsights: AIInsight[] = [
         confidence: 84,
         actionable: true,
         suggestedAction: 'Create personalized structured product proposals for identified 34 clients. Assign to top 3 RMs with highest structured product conversion rates.',
+        actionBy: 'TBD',
         dataPoints: [
             '34 high-propensity clients',
             'Avg PMS holding: ₹120 Cr',
@@ -135,18 +138,32 @@ const mockExecutiveInsights: AIInsight[] = [
 export default function AIInsightsPanel() {
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const [expandedInsight, setExpandedInsight] = useState<string | null>(null);
+    const [insights, setInsights] = useState<AIInsight[]>(mockExecutiveInsights);
 
     const categories = [
         { id: 'all', label: 'All Insights', icon: '🤖' },
         { id: 'opportunity', label: 'Opportunities', icon: '💎' },
         { id: 'risk', label: 'Risks', icon: '⚠️' },
         { id: 'trend', label: 'Trends', icon: '📈' },
-        { id: 'recommendation', label: 'Recommendations', icon: '💡' }
+        { id: 'recommendation', label: 'Recommendations', icon: '💡' },
+        { id: 'action_items', label: 'Action Items', icon: '⚡' }
     ];
 
     const filteredInsights = selectedCategory === 'all'
-        ? mockExecutiveInsights
-        : mockExecutiveInsights.filter(i => i.category === selectedCategory);
+        ? insights
+        : selectedCategory === 'action_items'
+            ? insights.filter(i => i.actionable || i.actionBy)
+            : insights.filter(i => i.category === selectedCategory);
+
+    const handleMoveToRisk = (id: string, e: React.MouseEvent) => {
+        e.stopPropagation();
+        setInsights(prev => prev.map(insight =>
+            insight.id === id
+                ? { ...insight, category: 'risk', title: `[Risk] ${insight.title}`, description: `Moved from Opportunity: ${insight.description}` }
+                : insight
+        ));
+        // Optional: Show toast here
+    };
 
     const getImpactColor = (impact: string) => {
         switch (impact) {
@@ -227,6 +244,12 @@ export default function AIInsightsPanel() {
                                         <span>Confidence:</span>
                                         <span className="font-semibold text-[#1A1A2E]">{insight.confidence}%</span>
                                     </div>
+                                    {insight.actionBy && (
+                                        <div className="flex items-center gap-1 text-xs font-medium text-[#E85D54] bg-[#FFF3F3] px-2 py-0.5 rounded">
+                                            <span>Action By:</span>
+                                            <span>{insight.actionBy}</span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
@@ -271,6 +294,14 @@ export default function AIInsightsPanel() {
                                         <button className="px-4 py-2 border border-gray-300 text-[#5A6C7D] rounded-lg text-sm font-medium hover:bg-[#F8F9FA] transition-colors">
                                             Export Report
                                         </button>
+                                        {insight.category === 'opportunity' && (
+                                            <button
+                                                onClick={(e) => handleMoveToRisk(insight.id, e)}
+                                                className="px-4 py-2 border border-[#DC3545] text-[#DC3545] rounded-lg text-sm font-medium hover:bg-[#FFF3F3] transition-colors flex items-center gap-2"
+                                            >
+                                                <span>⚠️</span> Move to Risk
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
                             )}

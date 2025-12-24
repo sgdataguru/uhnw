@@ -773,6 +773,7 @@ export interface ClientProductMix {
   totalAUM: number;
   region: string;
   assignedRM: string;
+  assignedRMEmail?: string;
   products: {
     category: NuvamaProduct;
     aum: number;
