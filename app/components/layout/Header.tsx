@@ -7,11 +7,9 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import Avatar from '../ui/Avatar';
 import { useUserRole } from '@/app/hooks/useUserRole';
 import ThemeToggle from './ThemeToggle';
-import type { UserRole } from '@/types';
 
 interface HeaderProps {
   userName?: string;
@@ -20,22 +18,8 @@ interface HeaderProps {
 
 export default function Header({ userName, userInitials }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [showRoleMenu, setShowRoleMenu] = useState(false);
   const [silentMode, setSilentMode] = useState(false);
-  const { role, userProfile, switchRole } = useUserRole();
-  const router = useRouter();
-
-  const handleRoleSwitch = (newRole: UserRole) => {
-    switchRole(newRole);
-    setShowRoleMenu(false);
-
-    // Navigate to appropriate dashboard
-    if (newRole === 'rm') {
-      router.push('/rm');
-    } else if (newRole === 'executive') {
-      router.push('/executive');
-    }
-  };
+  const { role, userProfile } = useUserRole();
 
   const displayName = userName || userProfile.name;
   const displayInitials = userInitials || userProfile.name.split(' ').map(n => n[0]).join('');
@@ -86,42 +70,11 @@ export default function Header({ userName, userInitials }: HeaderProps) {
           />
 
           {/* Role Badge */}
-          <div className="relative">
-            <button
-              onClick={() => setShowRoleMenu(!showRoleMenu)}
-              className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--control-surface)] border border-[var(--control-border)] text-[var(--text-primary)] hover:bg-[rgba(217,180,114,0.1)] transition-colors"
-            >
-              <span className="text-xs font-medium text-[var(--text-primary)]">
-                {role === 'rm' ? 'RM' : role === 'executive' ? 'Executive' : 'Admin'}
-              </span>
-              <svg className="w-3 h-3 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
-            {/* Role Switcher Dropdown */}
-            {showRoleMenu && (
-              <div className="absolute top-full left-0 mt-3 w-56 bg-[var(--surface-card)] rounded-xl shadow-[var(--shadow-md)] border border-[var(--header-border)] py-3 backdrop-blur-md">
-                <button
-                  onClick={() => handleRoleSwitch('rm')}
-                  className={`w-full px-4 py-3 text-left text-sm flex items-center gap-3 transition-colors ${role === 'rm' ? 'bg-[rgba(217,180,114,0.14)] text-[var(--text-primary)] font-medium' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[rgba(217,180,114,0.08)]'}`}
-                >
-                  <svg className="w-5 h-5 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.7} d="M12 20l-8-8 3-3 5 5 7-7 3 3z" />
-                  </svg>
-                  Relationship Manager
-                </button>
-                <button
-                  onClick={() => handleRoleSwitch('executive')}
-                  className={`w-full px-4 py-3 text-left text-sm flex items-center gap-3 transition-colors ${role === 'executive' ? 'bg-[rgba(217,180,114,0.14)] text-[var(--text-primary)] font-medium' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[rgba(217,180,114,0.08)]'}`}
-                >
-                  <svg className="w-5 h-5 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.7} d="M5 13v5m7-9v9m7-13v13M3 20h18" />
-                  </svg>
-                  Executive View
-                </button>
-              </div>
-            )}
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--control-surface)] border border-[var(--control-border)] text-[var(--text-primary)]">
+            <span className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-muted)]">Role</span>
+            <span className="text-xs font-medium text-[var(--text-primary)]">
+              {role === 'rm' ? 'RM' : role === 'executive' ? 'Executive' : 'Admin'}
+            </span>
           </div>
         </div>
 
