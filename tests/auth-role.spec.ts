@@ -34,3 +34,26 @@ test('RM cannot access executive dashboard', async ({ page }) => {
   await page.goto('/executive');
   await expect(page).toHaveURL(/\/rm/);
 });
+
+test('User menu toggles and logout clears auth', async ({ page }) => {
+  await loginAs(page, RM_USER);
+  await expect(page).toHaveURL(/\/rm$/);
+
+  const userMenuButton = page.locator('button[aria-haspopup="menu"]');
+  await userMenuButton.click();
+  await expect(page.getByRole('menuitem', { name: 'Logout' })).toBeVisible();
+
+  await page.mouse.click(10, 10);
+  await expect(page.getByRole('menuitem', { name: 'Logout' })).toBeHidden();
+
+  await userMenuButton.click();
+  await page.getByRole('menuitem', { name: 'Logout' }).click();
+  await expect(page).toHaveURL(/\/login$/);
+
+  const storedAuth = await page.evaluate(() => ({
+    local: localStorage.getItem('nuvama_auth'),
+    session: sessionStorage.getItem('nuvama_auth'),
+  }));
+  expect(storedAuth.local).toBeNull();
+  expect(storedAuth.session).toBeNull();
+});
