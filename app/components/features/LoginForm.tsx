@@ -11,6 +11,8 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { authenticateUser } from '@/lib/auth/mock-auth';
+import { getDefaultDashboardRoute, setStoredAuth } from '@/lib/auth/session';
 
 // Validation schema
 const loginSchema = z.object({
@@ -20,12 +22,6 @@ const loginSchema = z.object({
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
-
-// Demo credentials
-const DEMO_CREDENTIALS = {
-  email: 'demo@nuvama.com',
-  password: 'cockpit2025',
-};
 
 export default function LoginForm() {
   const router = useRouter();
@@ -51,34 +47,11 @@ export default function LoginForm() {
     // Simulate network delay
     await new Promise((resolve) => setTimeout(resolve, 800));
 
-    // Validate credentials
-    if (
-      data.email === DEMO_CREDENTIALS.email &&
-      data.password === DEMO_CREDENTIALS.password
-    ) {
-      // Store authentication state
-      const authData = {
-        isAuthenticated: true,
-        user: {
-          email: data.email,
-          name: 'Demo User',
-          role: 'rm',
-        },
-      };
+    const session = authenticateUser(data.email, data.password);
 
-      // Store in localStorage if remember me is checked
-      if (data.rememberMe) {
-        localStorage.setItem('nuvama_auth', JSON.stringify(authData));
-      } else {
-        // Store in sessionStorage for session-only
-        sessionStorage.setItem('nuvama_auth', JSON.stringify(authData));
-      }
-
-      // Set default role
-      localStorage.setItem('nuvama_user_role', 'rm');
-
-      // Redirect to dashboard
-      router.push('/rm');
+    if (session) {
+      setStoredAuth(session, Boolean(data.rememberMe));
+      router.push(getDefaultDashboardRoute(session.user.role));
     } else {
       setErrorMessage('Invalid email or password. Please try again.');
       setIsLoading(false);
@@ -126,7 +99,7 @@ export default function LoginForm() {
                 borderColor: 'var(--input-border)',
                 color: 'var(--text-primary)',
               }}
-              placeholder="demo@nuvama.com"
+              placeholder="rm_user@nuvama.com"
             />
             {errors.email && (
               <p className="mt-2 text-sm text-red-500 dark:text-red-400">{errors.email.message}</p>
@@ -258,7 +231,8 @@ export default function LoginForm() {
               Demo Credentials
             </p>
             <div className="text-xs space-y-1 text-center" style={{ color: 'var(--text-secondary)' }}>
-              <p><span style={{ color: 'var(--text-muted)' }}>Email:</span> demo@nuvama.com</p>
+              <p><span style={{ color: 'var(--text-muted)' }}>RM:</span> rm_user@nuvama.com</p>
+              <p><span style={{ color: 'var(--text-muted)' }}>Executive:</span> exec_user@nuvama.com</p>
               <p><span style={{ color: 'var(--text-muted)' }}>Password:</span> cockpit2025</p>
             </div>
           </div>

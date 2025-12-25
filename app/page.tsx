@@ -7,44 +7,26 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useUserRole } from './hooks/useUserRole';
+import { clearStoredAuth, getDefaultDashboardRoute, getStoredAuth } from '@/lib/auth/session';
 
 export default function LandingPage() {
   const router = useRouter();
-  const { isRM, isExecutive } = useUserRole();
-
   useEffect(() => {
     // Check if user is authenticated
     const checkAuth = () => {
-      const authData = localStorage.getItem('nuvama_auth') || sessionStorage.getItem('nuvama_auth');
-      
-      if (authData) {
-        try {
-          const auth = JSON.parse(authData);
-          if (auth.isAuthenticated) {
-            // Redirect to appropriate dashboard based on role
-            if (isRM) {
-              router.push('/rm');
-            } else if (isExecutive) {
-              router.push('/executive');
-            } else {
-              router.push('/rm'); // Default to RM dashboard
-            }
-            return;
-          }
-        } catch {
-          // Invalid auth data, clear it
-          localStorage.removeItem('nuvama_auth');
-          sessionStorage.removeItem('nuvama_auth');
-        }
+      const auth = getStoredAuth();
+
+      if (auth?.isAuthenticated) {
+        router.push(getDefaultDashboardRoute(auth.user.role));
+        return;
       }
-      
-      // Not authenticated, redirect to login
+
+      clearStoredAuth();
       router.push('/login');
     };
 
     checkAuth();
-  }, [router, isRM, isExecutive]);
+  }, [router]);
 
   // Loading state while checking authentication
   return (

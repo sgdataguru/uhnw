@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import LoginShell from '../components/auth/LoginShell';
 import LoginForm from '../components/features/LoginForm';
+import { clearStoredAuth, getDefaultDashboardRoute, getStoredAuth } from '@/lib/auth/session';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -18,24 +19,14 @@ export default function LoginPage() {
   useEffect(() => {
     // Check if user is already authenticated
     const checkAuth = () => {
-      const authData = localStorage.getItem('nuvama_auth') || sessionStorage.getItem('nuvama_auth');
-      
-      if (authData) {
-        try {
-          const auth = JSON.parse(authData);
-          if (auth.isAuthenticated) {
-            // Redirect to appropriate dashboard based on role
-            const role = localStorage.getItem('nuvama_user_role') || 'rm';
-            router.push(role === 'executive' ? '/executive' : '/rm');
-            return;
-          }
-        } catch {
-          // Invalid auth data, clear it
-          localStorage.removeItem('nuvama_auth');
-          sessionStorage.removeItem('nuvama_auth');
-        }
+      const auth = getStoredAuth();
+
+      if (auth?.isAuthenticated) {
+        router.push(getDefaultDashboardRoute(auth.user.role));
+        return;
       }
-      
+
+      clearStoredAuth();
       setIsChecking(false);
     };
 
