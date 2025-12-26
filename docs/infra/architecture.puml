@@ -1,0 +1,42 @@
+@startuml
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v14.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/Analytics/MSK.puml
+!include AWSPuml/Analytics/EMRCluster.puml
+!include AWSPuml/Storage/SimpleStorageService.puml
+!include AWSPuml/Database/RDS.puml
+!include AWSPuml/General/Users.puml
+
+title UHNW Data Platform Architecture (AWS)
+
+Users(vendors, "Data Vendors\n(APIs)")
+Users(rms, "Relationship Managers")
+
+package "Data Ingestion" {
+    MSK(kafka_cluster, "Streaming Events\n(AWS MSK)", "Kafka")
+}
+
+package "Data Processing" {
+    EMRCluster(spark_cluster, "Processing Engine\n(Spark Streaming)", "EMR/Glue")
+}
+
+package "Storage Layer (Lakehouse)" {
+    SimpleStorageService(s3_bronze, "Bronze Layer\n(Raw)", "S3")
+    SimpleStorageService(s3_silver, "Silver Layer\n(Cleaned)", "S3")
+    SimpleStorageService(s3_gold, "Gold Layer\n(Aggregated)", "S3")
+}
+
+package "Serving Layer" {
+    RDS(postgres, "Metadata & Profiles\n(PostgreSQL)", "RDS")
+}
+
+vendors --> kafka_cluster : "Liquidity Signals\n(JSON)"
+kafka_cluster --> spark_cluster : "Stream"
+spark_cluster --> s3_bronze : "Raw Dump"
+spark_cluster --> s3_silver : "ETL/Clean"
+spark_cluster --> s3_gold : "Business Logic"
+
+s3_gold --> postgres : "Sync High-Value Events"
+postgres --> rms : "Insights Dashboard"
+
+@enduml
