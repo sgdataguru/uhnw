@@ -7,11 +7,117 @@
 
 import { useState } from 'react';
 import type { LiquidityTrigger, LiquidityTimelineFilter } from '@/types';
+import LiquiditySignalCard from './LiquiditySignalCard';
 
 interface LiquidityTriggersPanelProps {
     triggers: LiquidityTrigger[];
     isLoading?: boolean;
 }
+
+interface SignalGroup {
+    title: string;
+    colorScheme: 'red' | 'yellow' | 'green';
+    signals: {
+        companyName: string;
+        companyCode: string;
+        mappedClient: string;
+        clientCode: string;
+        eventDescription: string;
+        isImportant?: boolean;
+    }[];
+}
+
+// Color scheme mapping for signal groups
+const COLOR_SCHEME_CLASSES = {
+    red: {
+        border: 'border-red-200',
+        bg: 'bg-red-50',
+        text: 'text-red-700',
+    },
+    yellow: {
+        border: 'border-yellow-200',
+        bg: 'bg-yellow-50',
+        text: 'text-yellow-700',
+    },
+    green: {
+        border: 'border-green-200',
+        bg: 'bg-green-50',
+        text: 'text-green-700',
+    },
+} as const;
+
+// Grouped liquidity signals data
+const LIQUIDITY_SIGNAL_GROUPS: SignalGroup[] = [
+    {
+        title: 'RED — High Urgency / High Impact (Immediate RM Action)',
+        colorScheme: 'red',
+        signals: [
+            {
+                companyName: 'Nectar Lifesciences Ltd',
+                companyCode: '#NSE:NECLIFE',
+                mappedClient: 'Ramesh Gupta',
+                clientCode: '#HC001',
+                eventDescription: 'Buyback — Record Date Liquidity',
+                isImportant: true,
+            },
+            {
+                companyName: 'VLS Finance Ltd',
+                companyCode: '#NSE:VLSFINANCE',
+                mappedClient: 'Sanjay Malhotra',
+                clientCode: '#HC128',
+                eventDescription: 'Buyback — Tender Window Live',
+                isImportant: true,
+            },
+            {
+                companyName: 'Covidh Technologies Ltd',
+                companyCode: '#NSE:COVIDH',
+                mappedClient: 'Ramesh Gupta',
+                clientCode: '#HC001',
+                eventDescription: 'Open Offer — Tender Window Live',
+            },
+        ],
+    },
+    {
+        title: 'YELLOW — Medium Urgency / Watch Closely',
+        colorScheme: 'yellow',
+        signals: [
+            {
+                companyName: 'Aurobindo Pharma Ltd',
+                companyCode: '#NSE:AUROPHARMA',
+                mappedClient: 'Megha Iyer',
+                clientCode: '#HC084',
+                eventDescription: 'Block Deal — Promoter Stake Sale',
+            },
+            {
+                companyName: 'Glenmark Life Sciences',
+                companyCode: '#NSE:GLENMARKL',
+                mappedClient: 'Rohit Khanna',
+                clientCode: '#HC142',
+                eventDescription: 'Demergers — Board Resolution Expected',
+            },
+        ],
+    },
+    {
+        title: 'GREEN — Early Signal / Opportunity Radar',
+        colorScheme: 'green',
+        signals: [
+            {
+                companyName: 'CMS Info Systems',
+                companyCode: '#NSE:CMSINFO',
+                mappedClient: 'Neelam Chopra',
+                clientCode: '#HC109',
+                eventDescription: 'ESOP Vesting — 6 Month Window',
+            },
+            {
+                companyName: 'L&T Technology Services',
+                companyCode: '#NSE:LTTS',
+                mappedClient: 'Harish Batra',
+                clientCode: '#HC062',
+                eventDescription: 'Dividend Signal — Capital Allocation Review',
+            },
+        ],
+    },
+];
 
 export default function LiquidityTriggersPanel({ triggers, isLoading }: LiquidityTriggersPanelProps) {
     const [timelineFilter, setTimelineFilter] = useState<LiquidityTimelineFilter>('0-30');
@@ -126,96 +232,30 @@ export default function LiquidityTriggersPanel({ triggers, isLoading }: Liquidit
 
             {/* Triggers List */}
             <div className="p-6 space-y-4 max-h-[600px] overflow-y-auto">
-                <div className="space-y-3 rounded-lg border border-red-200 bg-red-50 p-4">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-red-700">
-                        RED — High Urgency / High Impact (Immediate RM Action)
-                    </p>
-                    <div className="space-y-3">
-                        <div className="border border-gray-200 rounded-lg p-5 hover:border-[#E85D54] transition-colors cursor-pointer">
-                            <div className="space-y-2">
-                                <h4 className="font-semibold text-[#1A1A2E]">
-                                    Nectar Lifesciences Ltd <span className="text-gray-500 text-sm">(#NSE:NECLIFE)</span>
-                                </h4>
-                                <p className="text-sm text-[#5A6C7D]">Mapped UHNW: Ramesh Gupta (#HC001)</p>
-                                <p className="text-sm text-[#5A6C7D]">
-                                    Buyback — Record Date Liquidity <span className="font-semibold text-[#E85D54]">| IMPORTANT SIGNAL</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div className="border border-gray-200 rounded-lg p-5 hover:border-[#E85D54] transition-colors cursor-pointer">
-                            <div className="space-y-2">
-                                <h4 className="font-semibold text-[#1A1A2E]">
-                                    VLS Finance Ltd <span className="text-gray-500 text-sm">(#NSE:VLSFINANCE)</span>
-                                </h4>
-                                <p className="text-sm text-[#5A6C7D]">Mapped UHNW: Sanjay Malhotra (#HC128)</p>
-                                <p className="text-sm text-[#5A6C7D]">
-                                    Buyback — Tender Window Live <span className="font-semibold text-[#E85D54]">| IMPORTANT SIGNAL</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div className="border border-gray-200 rounded-lg p-5 hover:border-[#E85D54] transition-colors cursor-pointer">
-                            <div className="space-y-2">
-                                <h4 className="font-semibold text-[#1A1A2E]">
-                                    Covidh Technologies Ltd <span className="text-gray-500 text-sm">(#NSE:COVIDH)</span>
-                                </h4>
-                                <p className="text-sm text-[#5A6C7D]">Mapped UHNW: Ramesh Gupta (#HC001)</p>
-                                <p className="text-sm text-[#5A6C7D]">Open Offer — Tender Window Live</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {LIQUIDITY_SIGNAL_GROUPS.map((group) => {
+                    const colors = COLOR_SCHEME_CLASSES[group.colorScheme];
 
-                <div className="space-y-3 rounded-lg border border-yellow-200 bg-yellow-50 p-4">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-yellow-700">
-                        YELLOW — Medium Urgency / Watch Closely
-                    </p>
-                    <div className="space-y-3">
-                        <div className="border border-gray-200 rounded-lg p-5 hover:border-[#E85D54] transition-colors cursor-pointer">
-                            <div className="space-y-2">
-                                <h4 className="font-semibold text-[#1A1A2E]">
-                                    Aurobindo Pharma Ltd <span className="text-gray-500 text-sm">(#NSE:AUROPHARMA)</span>
-                                </h4>
-                                <p className="text-sm text-[#5A6C7D]">Mapped UHNW: Megha Iyer (#HC084)</p>
-                                <p className="text-sm text-[#5A6C7D]">Block Deal — Promoter Stake Sale</p>
+                    return (
+                        <div key={group.title} className={`space-y-3 rounded-lg border ${colors.border} ${colors.bg} p-4`}>
+                            <p className={`text-xs font-semibold uppercase tracking-wide ${colors.text}`}>
+                                {group.title}
+                            </p>
+                            <div className="space-y-3">
+                                {group.signals.map((signal) => (
+                                    <LiquiditySignalCard
+                                        key={signal.companyCode}
+                                        companyName={signal.companyName}
+                                        companyCode={signal.companyCode}
+                                        mappedClient={signal.mappedClient}
+                                        clientCode={signal.clientCode}
+                                        eventDescription={signal.eventDescription}
+                                        isImportant={signal.isImportant}
+                                    />
+                                ))}
                             </div>
                         </div>
-                        <div className="border border-gray-200 rounded-lg p-5 hover:border-[#E85D54] transition-colors cursor-pointer">
-                            <div className="space-y-2">
-                                <h4 className="font-semibold text-[#1A1A2E]">
-                                    Glenmark Life Sciences <span className="text-gray-500 text-sm">(#NSE:GLENMARKL)</span>
-                                </h4>
-                                <p className="text-sm text-[#5A6C7D]">Mapped UHNW: Rohit Khanna (#HC142)</p>
-                                <p className="text-sm text-[#5A6C7D]">Demergers — Board Resolution Expected</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="space-y-3 rounded-lg border border-green-200 bg-green-50 p-4">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-green-700">
-                        GREEN — Early Signal / Opportunity Radar
-                    </p>
-                    <div className="space-y-3">
-                        <div className="border border-gray-200 rounded-lg p-5 hover:border-[#E85D54] transition-colors cursor-pointer">
-                            <div className="space-y-2">
-                                <h4 className="font-semibold text-[#1A1A2E]">
-                                    CMS Info Systems <span className="text-gray-500 text-sm">(#NSE:CMSINFO)</span>
-                                </h4>
-                                <p className="text-sm text-[#5A6C7D]">Mapped UHNW: Neelam Chopra (#HC109)</p>
-                                <p className="text-sm text-[#5A6C7D]">ESOP Vesting — 6 Month Window</p>
-                            </div>
-                        </div>
-                        <div className="border border-gray-200 rounded-lg p-5 hover:border-[#E85D54] transition-colors cursor-pointer">
-                            <div className="space-y-2">
-                                <h4 className="font-semibold text-[#1A1A2E]">
-                                    L&T Technology Services <span className="text-gray-500 text-sm">(#NSE:LTTS)</span>
-                                </h4>
-                                <p className="text-sm text-[#5A6C7D]">Mapped UHNW: Harish Batra (#HC062)</p>
-                                <p className="text-sm text-[#5A6C7D]">Dividend Signal — Capital Allocation Review</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    );
+                })}
             </div>
         </div>
     );
