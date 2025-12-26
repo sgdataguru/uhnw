@@ -27,6 +27,25 @@ interface SignalGroup {
     }[];
 }
 
+// Color scheme mapping for signal groups
+const COLOR_SCHEME_CLASSES = {
+    red: {
+        border: 'border-red-200',
+        bg: 'bg-red-50',
+        text: 'text-red-700',
+    },
+    yellow: {
+        border: 'border-yellow-200',
+        bg: 'bg-yellow-50',
+        text: 'text-yellow-700',
+    },
+    green: {
+        border: 'border-green-200',
+        bg: 'bg-green-50',
+        text: 'text-green-700',
+    },
+} as const;
+
 // Grouped liquidity signals data
 const LIQUIDITY_SIGNAL_GROUPS: SignalGroup[] = [
     {
@@ -214,25 +233,17 @@ export default function LiquidityTriggersPanel({ triggers, isLoading }: Liquidit
             {/* Triggers List */}
             <div className="p-6 space-y-4 max-h-[600px] overflow-y-auto">
                 {LIQUIDITY_SIGNAL_GROUPS.map((group) => {
-                    const borderColor = group.colorScheme === 'red' ? 'border-red-200' : 
-                                       group.colorScheme === 'yellow' ? 'border-yellow-200' : 
-                                       'border-green-200';
-                    const bgColor = group.colorScheme === 'red' ? 'bg-red-50' : 
-                                   group.colorScheme === 'yellow' ? 'bg-yellow-50' : 
-                                   'bg-green-50';
-                    const textColor = group.colorScheme === 'red' ? 'text-red-700' : 
-                                     group.colorScheme === 'yellow' ? 'text-yellow-700' : 
-                                     'text-green-700';
+                    const colors = COLOR_SCHEME_CLASSES[group.colorScheme];
 
                     return (
-                        <div key={group.title} className={`space-y-3 rounded-lg border ${borderColor} ${bgColor} p-4`}>
-                            <p className={`text-xs font-semibold uppercase tracking-wide ${textColor}`}>
+                        <div key={group.title} className={`space-y-3 rounded-lg border ${colors.border} ${colors.bg} p-4`}>
+                            <p className={`text-xs font-semibold uppercase tracking-wide ${colors.text}`}>
                                 {group.title}
                             </p>
                             <div className="space-y-3">
-                                {group.signals.map((signal, index) => (
+                                {group.signals.map((signal) => (
                                     <LiquiditySignalCard
-                                        key={`${signal.companyCode}-${index}`}
+                                        key={signal.companyCode}
                                         companyName={signal.companyName}
                                         companyCode={signal.companyCode}
                                         mappedClient={signal.mappedClient}
