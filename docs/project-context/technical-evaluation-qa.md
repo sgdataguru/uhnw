@@ -6,6 +6,697 @@
 
 ---
 
+## Pre-Implementation Review Framework
+
+> **Context:** This section provides a comprehensive code review framework to evaluate future implementations. Since the web app is not yet fully implemented (currently using mock data and prototype UI), these criteria serve as quality gates for production-ready code.
+
+### 1. Correctness and Functionality
+
+**Q: Does the code actually solve the problem or implement the feature it is intended to?**
+
+**Evaluation Criteria:**
+
+- ✅ Feature requirements from user stories are fully met
+- ✅ Business logic correctly implements domain rules (e.g., lead scoring formula)
+- ✅ API contracts match frontend expectations (request/response schemas)
+- ✅ Edge cases are identified and handled (empty states, null values, boundary conditions)
+
+**Current Status:**
+
+- ⚠️ **Partial:** UI implements features visually, but backend logic is mocked
+- ❌ **Missing:** Real data ingestion, database persistence, external API integrations
+
+**Future Implementation Checklist:**
+
+- [ ] Verify lead scoring algorithm produces correct scores for various signal combinations
+- [ ] Test signal deduplication logic with duplicate data from multiple sources
+- [ ] Validate RBAC enforcement prevents unauthorized access to executive-only features
+- [ ] Confirm real-time updates trigger correctly when new signals arrive
+
+---
+
+**Q: Does it handle expected inputs and various edge/corner cases correctly?**
+
+**Evaluation Criteria:**
+
+- ✅ Input validation prevents invalid data from entering the system
+- ✅ Null/undefined handling prevents runtime errors
+- ✅ Boundary conditions tested (e.g., score = 0, score = 100, empty signal arrays)
+- ✅ Error messages are user-friendly and actionable
+
+**Current Gaps:**
+
+- ❌ No input validation on API routes (query params accepted without Zod validation)
+- ❌ No handling for malformed data from external APIs
+- ❌ No graceful degradation when third-party services are down
+
+**Test Cases to Implement:**
+
+```typescript
+// Example: Lead Scoring Edge Cases
+describe('calculateLeadScore', () => {
+  it('returns 0 for prospect with no signals', () => {
+    expect(calculateLeadScore('client-1', [])).toBe(0);
+  });
+  
+  it('caps score at 100 even with excessive signals', () => {
+    const manySignals = Array(100).fill(criticalIPOSignal);
+    expect(calculateLeadScore('client-2', manySignals)).toBe(100);
+  });
+  
+  it('handles signals with missing confidence values', () => {
+    const signalWithoutConfidence = { ...baseSignal, confidence: undefined };
+    expect(() => calculateLeadScore('client-3', [signalWithoutConfidence])).not.toThrow();
+  });
+});
+```
+
+---
+
+**Q: Does it pass all associated unit and integration tests?**
+
+**Current Status:**
+
+- ✅ **E2E Tests:** 2 Playwright tests (auth flow, notifications)
+- ❌ **Unit Tests:** 0 tests for business logic
+- ❌ **Integration Tests:** 0 tests for API endpoints
+- ❌ **Component Tests:** 0 tests for React components
+
+**Required Test Coverage (Before Production):**
+
+| Layer | Target Coverage | Current | Priority |
+|-------|----------------|---------|----------|
+| Business Logic (`lib/scoring/`) | 90% | 0% | P0 |
+| API Routes (`app/api/`) | 80% | 0% | P0 |
+| React Components | 70% | 0% | P1 |
+| Integration (API + DB) | 60% | 0% | P1 |
+
+**Implementation Plan:**
+
+```bash
+# Week 1: Unit Tests
+npm install -D vitest @vitest/ui
+# Test: lib/scoring/calculate-score.ts
+# Test: lib/auth/mock-auth.ts
+
+# Week 2: API Integration Tests
+npm install -D supertest
+# Test: POST /api/signals/[id]/action
+# Test: GET /api/prospects with filters
+
+# Week 3: Component Tests
+npm install -D @testing-library/react @testing-library/user-event
+# Test: ProspectDetailPanel
+# Test: AIInsightsPanel
+```
+
+---
+
+### 2. Code Quality and Maintainability
+
+**Q: Is the code clean, well-organized, and easy to read and understand for other developers?**
+
+**Evaluation Criteria:**
+
+- ✅ Functions/methods have single responsibility (SRP)
+- ✅ Variable names are descriptive (`leadScore` not `ls`)
+- ✅ Complex logic is broken into smaller, named functions
+- ✅ Magic numbers replaced with named constants
+
+**Current Assessment:**
+
+- ✅ **Good:** TypeScript types are comprehensive (`types/index.ts` - 910 lines)
+- ✅ **Good:** Folder structure follows Next.js conventions
+- ⚠️ **Needs Improvement:** API routes have inline mock data (should be in separate files)
+- ❌ **Poor:** No service layer abstraction (API routes directly manipulate data)
+
+**Refactoring Recommendations:**
+
+```typescript
+// ❌ BEFORE: app/api/prospects/route.ts (lines 10-207)
+const mockProspects: Prospect[] = [ /* 200 lines of data */ ];
+export async function GET(request: NextRequest) {
+  let filteredProspects = [...mockProspects];
+  // ... filtering logic ...
+}
+
+// ✅ AFTER: Create service layer
+// lib/services/prospect-service.ts
+export class ProspectService {
+  async getProspects(filters: ProspectFilters): Promise<Prospect[]> {
+    const prospects = await db.prospect.findMany({
+      where: this.buildWhereClause(filters),
+      include: { signals: true }
+    });
+    return prospects;
+  }
+}
+
+// app/api/prospects/route.ts
+const prospectService = new ProspectService();
+export async function GET(request: NextRequest) {
+  const filters = parseFilters(request.nextUrl.searchParams);
+  const prospects = await prospectService.getProspects(filters);
+  return NextResponse.json({ success: true, data: prospects });
+}
+```
+
+---
+
+**Q: Does it follow the team's established coding standards, style guides, and best practices (e.g., DRY, SOLID principles)?**
+
+**Current Adherence:**
+
+- ✅ **DRY (Don't Repeat Yourself):** Scoring logic centralized in `lib/scoring/`
+- ⚠️ **SOLID - Single Responsibility:** API routes do too much (parsing, filtering, pagination)
+- ❌ **SOLID - Open/Closed:** No abstraction for data sources (hard to add new integrations)
+- ❌ **SOLID - Dependency Inversion:** Components directly call `fetch()` instead of using repository pattern
+
+**Code Standards to Enforce:**
+
+```typescript
+// ✅ GOOD: Separation of Concerns
+// lib/repositories/signal-repository.ts
+export interface ISignalRepository {
+  findAll(filters: SignalFilters): Promise<Signal[]>;
+  findById(id: string): Promise<Signal | null>;
+  create(signal: Signal): Promise<Signal>;
+}
+
+export class PrismaSignalRepository implements ISignalRepository {
+  async findAll(filters: SignalFilters): Promise<Signal[]> {
+    return db.signal.findMany({ where: filters });
+  }
+}
+
+// app/api/signals/route.ts
+const signalRepo: ISignalRepository = new PrismaSignalRepository();
+export async function GET(request: NextRequest) {
+  const filters = parseFilters(request);
+  const signals = await signalRepo.findAll(filters);
+  return NextResponse.json(signals);
+}
+```
+
+---
+
+**Q: Is the code adequately documented (inline comments, external documentation) where the logic might not be immediately obvious?**
+
+**Current Documentation:**
+
+- ✅ **Good:** JSDoc comments on complex functions (e.g., `lib/scoring/calculate-score.ts`)
+- ✅ **Good:** README files in `lib/mock-data/` and `docs/`
+- ⚠️ **Needs Improvement:** No API documentation (Swagger/OpenAPI)
+- ❌ **Missing:** Architecture Decision Records (ADRs)
+
+**Documentation Requirements:**
+
+```typescript
+/**
+ * Calculates lead score based on weighted signal analysis.
+ * 
+ * @param clientId - Unique identifier for the prospect
+ * @param signals - Array of liquidity signals detected for this client
+ * @param previousScore - Optional previous score for trend calculation
+ * @returns LeadScore object with score (0-100), category (HOT/WARM/COLD), and explanation
+ * 
+ * @example
+ * const score = calculateLeadScore('client-123', [
+ *   { type: 'ipo', severity: 'critical', createdAt: new Date(), confidence: 0.95 }
+ * ]);
+ * // Returns: { score: 92, category: 'HOT', explanation: '...' }
+ * 
+ * @see {@link docs/features/lead-scoring-logic.md} for algorithm details
+ */
+export function calculateLeadScore(
+  clientId: string,
+  signals: Signal[],
+  previousScore?: number
+): LeadScore { /* ... */ }
+```
+
+**External Documentation to Create:**
+
+- [ ] `docs/api/openapi.yaml` - API specification
+- [ ] `docs/architecture/adr/` - Architecture Decision Records
+- [ ] `docs/operations/runbooks/` - Deployment and incident response guides
+
+---
+
+**Q: Are functions or methods too large or doing too much, suggesting they should be refactored into smaller, more modular pieces?**
+
+**Current Issues:**
+
+- ❌ `app/api/prospects/route.ts` GET handler: 90 lines (should be <30)
+- ❌ `app/(dashboard)/rm/page.tsx`: 218 lines (should extract sub-components)
+- ⚠️ `lib/scoring/calculate-score.ts`: Acceptable but could extract explanation generation
+
+**Refactoring Targets:**
+
+```typescript
+// ❌ BEFORE: Monolithic API handler (90 lines)
+export async function GET(request: NextRequest) {
+  // Parse params (10 lines)
+  // Filter logic (30 lines)
+  // Sort logic (15 lines)
+  // Pagination (10 lines)
+  // Response formatting (10 lines)
+}
+
+// ✅ AFTER: Modular approach
+export async function GET(request: NextRequest) {
+  const filters = parseProspectFilters(request);
+  const prospects = await prospectService.getProspects(filters);
+  return formatProspectsResponse(prospects, filters.pagination);
+}
+
+// Each helper function is <20 lines and testable independently
+```
+
+---
+
+### 3. Architecture and Design
+
+**Q: Does the new code integrate well with the existing system architecture without creating tight coupling or introducing anti-patterns?**
+
+**Current Architecture:**
+
+- ✅ **Good:** Next.js App Router structure is standard
+- ⚠️ **Concern:** No clear separation between presentation and business logic
+- ❌ **Anti-Pattern:** Direct `localStorage` access in components (should use context/hooks)
+- ❌ **Tight Coupling:** Components directly import mock data files
+
+**Architectural Improvements Needed:**
+
+```typescript
+// ❌ ANTI-PATTERN: Component directly accessing localStorage
+export function MyComponent() {
+  const auth = JSON.parse(localStorage.getItem('nuvama_auth'));
+  // Breaks on server-side rendering, hard to test
+}
+
+// ✅ BETTER: Use context + custom hook
+export function MyComponent() {
+  const { user, isAuthenticated } = useAuth();
+  // Testable, SSR-safe, centralized auth logic
+}
+```
+
+**Architecture Compliance Checklist:**
+
+- [ ] All database access goes through repository layer
+- [ ] All external API calls go through integration layer (`lib/integrations/`)
+- [ ] All authentication checks use middleware (not inline in routes)
+- [ ] All business logic is in `lib/` (not in API routes or components)
+
+---
+
+**Q: Are the chosen algorithms and data structures appropriate and efficient for the use case?**
+
+**Current Algorithms:**
+
+- ✅ **Lead Scoring:** Weighted sum with time decay - appropriate for the use case
+- ⚠️ **Signal Filtering:** Array `.filter()` on mock data - will not scale to 10,000+ signals
+- ❌ **Network Graph:** Not implemented (planned feature)
+
+**Performance Analysis:**
+
+```typescript
+// ❌ INEFFICIENT: O(n) filter on every request
+export async function GET(request: NextRequest) {
+  let signals = [...mockSignals]; // 10,000 items
+  signals = signals.filter(s => s.severity === 'critical'); // O(n)
+  signals = signals.filter(s => s.isActioned === false); // O(n) again
+  signals = signals.sort((a, b) => b.createdAt - a.createdAt); // O(n log n)
+}
+
+// ✅ EFFICIENT: Database query with indexes
+export async function GET(request: NextRequest) {
+  const signals = await db.signal.findMany({
+    where: { severity: 'critical', isActioned: false },
+    orderBy: { createdAt: 'desc' },
+    take: 20
+  });
+  // Single O(log n) query with index on (severity, isActioned, createdAt)
+}
+```
+
+**Data Structure Recommendations:**
+
+| Use Case | Current | Recommended | Reason |
+|----------|---------|-------------|--------|
+| Signal lookup by ID | Array scan O(n) | Map/Index O(1) | Faster retrieval |
+| Prospect search | Array filter O(n) | DB index O(log n) | Scalability |
+| Network graph | Not implemented | Neo4j graph DB | Optimized for relationships |
+
+---
+
+**Q: How does the code handle errors and exceptions, and is it consistent with the system's existing model?**
+
+**Current Error Handling:**
+
+- ⚠️ **Inconsistent:** Some routes use try-catch, others don't
+- ❌ **Generic:** All errors return `FETCH_FAILED` (not specific enough)
+- ❌ **No Logging:** Errors only logged to console (not tracked)
+
+**Error Handling Standards:**
+
+```typescript
+// ❌ CURRENT: Generic error handling
+try {
+  const data = await fetchData();
+} catch (error) {
+  console.error('Error:', error);
+  return NextResponse.json({ success: false, error: { code: 'FETCH_FAILED', message: 'Failed' } });
+}
+
+// ✅ IMPROVED: Specific error codes + logging
+import { AppError, ErrorCode } from '@/lib/errors';
+import { logger } from '@/lib/logger';
+
+try {
+  const data = await fetchData();
+} catch (error) {
+  if (error instanceof ValidationError) {
+    logger.warn('Invalid input', { error, context: request.url });
+    return NextResponse.json({ 
+      success: false, 
+      error: { code: ErrorCode.INVALID_INPUT, message: error.message, fields: error.fields }
+    }, { status: 400 });
+  }
+  
+  logger.error('Unexpected error', { error, context: request.url });
+  return NextResponse.json({ 
+    success: false, 
+    error: { code: ErrorCode.INTERNAL_ERROR, message: 'An unexpected error occurred' }
+  }, { status: 500 });
+}
+```
+
+**Error Code Taxonomy to Implement:**
+
+```typescript
+export enum ErrorCode {
+  // Client Errors (4xx)
+  INVALID_INPUT = 'INVALID_INPUT',
+  UNAUTHORIZED = 'UNAUTHORIZED',
+  FORBIDDEN = 'FORBIDDEN',
+  NOT_FOUND = 'NOT_FOUND',
+  RATE_LIMIT_EXCEEDED = 'RATE_LIMIT_EXCEEDED',
+  
+  // Server Errors (5xx)
+  INTERNAL_ERROR = 'INTERNAL_ERROR',
+  DATABASE_ERROR = 'DATABASE_ERROR',
+  EXTERNAL_API_ERROR = 'EXTERNAL_API_ERROR',
+  SERVICE_UNAVAILABLE = 'SERVICE_UNAVAILABLE'
+}
+```
+
+---
+
+### 4. Security and Performance
+
+**Q: Are there any potential security vulnerabilities (e.g., SQL injection, XSS, improper authentication/authorization, exposed secrets)?**
+
+**Critical Vulnerabilities Identified:**
+
+1. ❌ **No Server-Side Auth:** All API routes are public
+2. ❌ **Client-Side RBAC:** Role checks only in frontend (easily bypassed)
+3. ❌ **No Input Sanitization:** User input not validated before processing
+4. ❌ **Secrets in Client:** Risk of exposing API keys via `NEXT_PUBLIC_` env vars
+5. ❌ **No CSRF Protection:** POST requests lack CSRF tokens
+
+**Security Checklist (Must Fix Before Production):**
+
+```typescript
+// ✅ Server-Side Auth Middleware
+// middleware.ts
+export function middleware(request: NextRequest) {
+  const token = request.cookies.get('auth-token');
+  if (!token) {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
+  
+  const user = verifyJWT(token);
+  if (!user) {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
+  
+  // Attach user to request headers for API routes
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set('x-user-id', user.id);
+  requestHeaders.set('x-user-role', user.role);
+  
+  return NextResponse.next({ request: { headers: requestHeaders } });
+}
+
+export const config = {
+  matcher: ['/api/:path*', '/rm/:path*', '/executive/:path*']
+};
+```
+
+**Input Validation Example:**
+
+```typescript
+// ✅ Zod validation on all API inputs
+import { z } from 'zod';
+
+const ProspectFiltersSchema = z.object({
+  minScore: z.number().min(0).max(100).optional(),
+  maxScore: z.number().min(0).max(100).optional(),
+  cities: z.array(z.string()).optional(),
+  page: z.number().min(1).default(1),
+  pageSize: z.number().min(1).max(100).default(20)
+});
+
+export async function GET(request: NextRequest) {
+  const params = Object.fromEntries(request.nextUrl.searchParams);
+  const filters = ProspectFiltersSchema.parse(params); // Throws if invalid
+  // ... rest of handler
+}
+```
+
+---
+
+**Q: Is the code efficient enough for anticipated use cases, and does it introduce any performance bottlenecks or memory management issues?**
+
+**Performance Benchmarks (Target):**
+
+| Metric | Target | Current (Mock) | With DB (Estimated) |
+|--------|--------|----------------|---------------------|
+| API Response Time (p95) | <200ms | 50ms | 150ms (needs optimization) |
+| Page Load Time (FCP) | <1.5s | 800ms | 1.2s (acceptable) |
+| Time to Interactive (TTI) | <3s | 2.1s | 2.8s (acceptable) |
+| Bundle Size (JS) | <300KB | 250KB | 280KB (good) |
+
+**Identified Bottlenecks:**
+
+```typescript
+// ❌ BOTTLENECK: N+1 query pattern (when DB is added)
+export async function GET(request: NextRequest) {
+  const prospects = await db.prospect.findMany();
+  
+  for (const prospect of prospects) {
+    prospect.signals = await db.signal.findMany({ 
+      where: { prospectId: prospect.id } 
+    }); // N+1 queries!
+  }
+}
+
+// ✅ OPTIMIZED: Single query with join
+export async function GET(request: NextRequest) {
+  const prospects = await db.prospect.findMany({
+    include: { signals: true } // Single query with JOIN
+  });
+}
+```
+
+**Memory Management:**
+
+- ⚠️ **Concern:** No pagination limits on API routes (could load 100,000 records)
+- ❌ **Missing:** No streaming for large datasets
+- ✅ **Good:** React components use proper cleanup in `useEffect`
+
+---
+
+**Q: Are appropriate logging and metrics in place so that the system's behavior and potential issues can be observed in production?**
+
+**Current Observability:**
+
+- ❌ **Logging:** Only `console.error()` (not structured, not persisted)
+- ❌ **Metrics:** No performance metrics collected
+- ❌ **Tracing:** No distributed tracing for API calls
+- ❌ **Alerting:** No alerts for errors or performance degradation
+
+**Observability Stack to Implement:**
+
+```typescript
+// ✅ Structured Logging with Pino
+import pino from 'pino';
+
+const logger = pino({
+  level: process.env.LOG_LEVEL || 'info',
+  formatters: {
+    level: (label) => ({ level: label.toUpperCase() })
+  }
+});
+
+// Usage in API routes
+logger.info({ userId: user.id, action: 'fetch_prospects', filters }, 'Fetching prospects');
+logger.error({ error, userId: user.id, endpoint: '/api/prospects' }, 'Failed to fetch prospects');
+```
+
+**Metrics to Track:**
+
+```typescript
+// ✅ Custom Metrics with Prometheus
+import { Counter, Histogram } from 'prom-client';
+
+const apiRequestDuration = new Histogram({
+  name: 'api_request_duration_seconds',
+  help: 'Duration of API requests in seconds',
+  labelNames: ['method', 'route', 'status_code']
+});
+
+const leadScoreCalculations = new Counter({
+  name: 'lead_score_calculations_total',
+  help: 'Total number of lead score calculations',
+  labelNames: ['category']
+});
+
+// In API handler
+const end = apiRequestDuration.startTimer();
+try {
+  const result = await handler(request);
+  end({ method: 'GET', route: '/api/prospects', status_code: 200 });
+  return result;
+} catch (error) {
+  end({ method: 'GET', route: '/api/prospects', status_code: 500 });
+  throw error;
+}
+```
+
+---
+
+### 5. Deployment and Testing
+
+**Q: How will the code be deployed, and is the process safe (e.g., can it be rolled back easily if needed)?**
+
+**Current Deployment:**
+
+- ✅ **Render.com:** Configured in `render.yaml`
+- ⚠️ **No Rollback Strategy:** No documented rollback procedure
+- ❌ **No Blue-Green Deployment:** Direct deployment to production
+- ❌ **No Canary Releases:** All users get new version immediately
+
+**Safe Deployment Strategy:**
+
+```yaml
+# .github/workflows/deploy.yml
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      # Run tests before deploying
+      - name: Run Tests
+        run: |
+          npm install
+          npm run test
+          npm run test:e2e
+      
+      # Build and deploy
+      - name: Deploy to Render
+        run: |
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
+      
+      # Health check after deployment
+      - name: Verify Deployment
+        run: |
+          sleep 30
+          curl -f https://uhnw.onrender.com/api/health || exit 1
+      
+      # Rollback on failure
+      - name: Rollback on Failure
+        if: failure()
+        run: |
+          curl -X POST ${{ secrets.RENDER_ROLLBACK_HOOK }}
+```
+
+**Rollback Procedure (To Document):**
+
+1. Identify failing deployment (via monitoring alerts)
+2. Trigger rollback via Render dashboard or API
+3. Verify health check passes on previous version
+4. Investigate root cause in staging environment
+5. Fix and redeploy
+
+---
+
+**Q: Is there sufficient test coverage for the changes?**
+
+**Test Coverage Requirements:**
+
+| Component | Target | Current | Gap |
+|-----------|--------|---------|-----|
+| Critical Business Logic | 90% | 0% | ❌ High Risk |
+| API Routes | 80% | 0% | ❌ High Risk |
+| React Components | 70% | 0% | ⚠️ Medium Risk |
+| Integration Tests | 60% | 0% | ⚠️ Medium Risk |
+| E2E Tests | 50% | 10% | ⚠️ Medium Risk |
+
+**Test Pyramid to Implement:**
+
+```
+        /\
+       /  \  E2E Tests (10 tests)
+      /____\
+     /      \  Integration Tests (30 tests)
+    /________\
+   /          \  Unit Tests (100+ tests)
+  /__________\
+```
+
+**Priority Test Cases:**
+
+```typescript
+// P0: Critical Path Tests
+describe('Lead Scoring (P0)', () => {
+  it('calculates correct score for IPO signal');
+  it('applies time decay correctly');
+  it('handles multiple signals from same source');
+});
+
+describe('Authentication (P0)', () => {
+  it('rejects invalid JWT tokens');
+  it('enforces role-based access control');
+  it('logs out user on token expiration');
+});
+
+// P1: Feature Tests
+describe('Signal Filtering (P1)', () => {
+  it('filters by timeline correctly');
+  it('filters by multiple priorities');
+  it('paginates results correctly');
+});
+
+// P2: Edge Case Tests
+describe('Error Handling (P2)', () => {
+  it('handles database connection failures gracefully');
+  it('retries failed external API calls');
+  it('returns user-friendly error messages');
+});
+```
+
+---
+
 ## 0) Repo Snapshot
 
 **Repo Name:** `uhnw` (UHNW Liquidity Intelligence Platform)
