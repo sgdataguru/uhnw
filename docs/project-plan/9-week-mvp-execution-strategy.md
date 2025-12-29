@@ -1,4 +1,4 @@
-# 9-Week MVP Execution Strategy: UHNW Liquidity Intelligence Platform
+# 9-Week MVP Execution Strategy: UHNW Wealth Intelligence Platform
 
 **Role:** Senior Technical Program Manager (TPM) & Lead Systems Architect  
 **Objective:** Deliver high-performance Web App MVP (Liquidity Triggers, Action Center, AI Insights, Network Visualization, Analytics)  
