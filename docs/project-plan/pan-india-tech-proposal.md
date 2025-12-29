@@ -12,7 +12,7 @@ To bridge the gap between "information abundance" and "actionable insight," we p
 
 Think of this solution not as new software your RMs have to learn, but as an intelligent assistant that works silently in the background. It solves the Pan-India scale challenge through three strategic pillars:
 
-1. **Unified Listening Post:** We connect to the pulse of the Indian economy. Whether it is a major IPO in Mumbai or a family business restructuring in Coimbatore, our system ingests and standardizes these signals instantly. It treats regional, vernacular data with the same importance as national headlines, ensuring no opportunity in Tier-2 markets is overlooked.
+1. **Unified Listening Post:** We connect to the pulse of the Indian and global market. Whether it is a major IPO in Mumbai or a family business restructuring in Coimbatore, our system ingests and standardizes these signals instantly. It treats regional, vernacular data with the same importance as national headlines, ensuring no opportunity in Tier-2 markets is overlooked.
 2. **Zero-Latency Delivery:** We recognize that a slow system is an unused system. Our architecture is built to bypass the connectivity limitations often faced in regional branches. By processing heavy data centrally and sending only lightweight, "ready-to-act" notifications to the RM's screen, we ensure that a manager in Surat acts with the same speed as a manager in Nariman Point.
 3. **Invisible Integration:** We respect the sanctity of your existing relationship workflows. This solution does not replace your CRM; it powers it. Insights appear directly within the tools your teams already trust, requiring no behavior change—only a shift in focus from "searching" to "closing."
 
