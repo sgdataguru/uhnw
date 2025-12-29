@@ -54,7 +54,7 @@ How important is it for this platform to work equally well in Mumbai, Delhi, Coi
 
 ## Engagement Model Recommendation: Time & Material (T&M)
 
-Given the **complex, exploratory nature** of integrating a real-time signal engine with legacy banking systems—and the dependencies on third-party data stability—we strongly recommend a **Time & Material (T&M) Engagement Model**.
+Given the **complex, exploratory nature** of integrating a real-time signal engine with legacy systems—and the dependencies on third-party data stability—we strongly recommend a **Time & Material (T&M) Engagement Model**.
 
 ### Why T&M for this Initiative?
 
