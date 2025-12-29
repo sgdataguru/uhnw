@@ -1596,3 +1596,336 @@ npm install -D msw # Mock Service Worker for API mocking
 - What is the target launch date for production?
 - Are there budget constraints for third-party services (Sentry, Upstash)?
 - Should we prioritize real-time features or data integrations first?
+
+## 14) Data Governance, Lineage & Explainability (MISSING)
+
+**Q:** How do we prove where a liquidity signal came from and how it evolved over time?
+
+### Why this is asked
+
+Auditors, compliance, and senior business stakeholders will always ask for lineage.
+
+### Current state
+
+- ❌ No data lineage tracking  
+- ❌ No versioning of signals  
+- ❌ No immutable event history  
+
+### Expected answer (what’s missing)
+
+- Introduce **event sourcing** for signals:
+  - Each signal mutation stored as an append-only event
+  - Original source payload stored (hashed / masked)
+- Add lineage metadata:
+  - `source_system`
+  - `source_event_id`
+  - `ingested_at`
+  - `transformed_at`
+- Implement **Signal History View** for audit
+
+### Recommendation
+
+```ts
+type SignalEvent = {
+  signalId: string
+  eventType: 'CREATED' | 'UPDATED' | 'SCORED' | 'ACTIONED'
+  sourceSystem: string
+  payloadHash: string
+  timestamp: string
+}
+```
+
+---
+
+## 15) AI Governance & Model Risk (MISSING)
+
+**Q:** How do we control hallucinations, bias, and regulatory risk from AI Insights?
+
+### Why this is asked
+
+Any GenAI in wealth/finance triggers **Model Risk Management (MRM)** expectations.
+
+### Current state
+
+- ⚠️ LLM used without guardrails  
+- ❌ No explainability enforcement  
+- ❌ No deterministic fallback  
+
+### Expected answer
+
+- Use AI as **summarizer**, not decision-maker
+- Enforce **structured JSON output only**
+- Validate AI output against deterministic rules
+- Maintain **human-in-the-loop** for RED signals
+
+### Missing controls
+
+- Prompt versioning
+- Output schema validation
+- Confidence thresholds
+- AI usage audit logs
+
+### Example guardrail
+
+```ts
+if (aiConfidence < 0.7 || outputSchemaInvalid) {
+  fallbackToRuleBasedExplanation()
+}
+```
+
+---
+
+## 16) Multi-Tenancy & Client Isolation (MISSING)
+
+**Q:** How does the system prevent one RM from seeing another RM’s UHNW clients?
+
+### Why this is asked
+
+This is a hard compliance blocker if unanswered.
+
+### Current state
+
+- ❌ No tenant isolation  
+- ❌ No row-level security  
+- ❌ No ownership enforcement  
+
+### Expected answer
+
+- Introduce `tenantId` / `rmId` at data model level
+- Enforce **Row-Level Security (RLS)** in DB
+- Validate ownership in every query
+
+### Missing implementation
+
+```sql
+WHERE prospect.rm_id = :current_rm_id
+```
+
+### Recommendation
+
+- Use Postgres RLS or Prisma middleware
+- Add ownership assertions to repository layer
+
+---
+
+## 17) Failure Modes & Graceful Degradation (MISSING)
+
+**Q:** What happens if Kafka, Neo4j, or AI services are partially down?
+
+### Why this is asked
+
+Senior engineers test resilience thinking, not happy paths.
+
+### Current state
+
+- ⚠️ Mentioned conceptually  
+- ❌ No concrete fallback logic  
+
+### Expected answer
+
+| Component | Failure | Fallback |
+|---|---|---|
+| Kafka | Lag / outage | Read last cached signals |
+| Neo4j | Down | Switch to List View |
+| LLM | Timeout | Rule-based summaries |
+| External APIs | Rate-limited | Backoff + stale data |
+
+### Missing
+
+- Circuit breakers
+- Health-aware routing
+- Feature flags tied to infra health
+
+---
+
+## 18) Scalability & Load Assumptions (MISSING)
+
+**Q:** What breaks first at 10× scale?
+
+### Why this is asked
+
+This separates prototype from platform.
+
+### Current state
+
+- ⚠️ Some performance estimates  
+- ❌ No load model  
+
+### Expected answer
+
+- Bottlenecks identified:
+  - API fan-out
+  - Signal deduplication
+  - AI token costs
+- Introduce:
+  - Async ingestion
+  - Read replicas
+  - Hot-path caching
+
+### Missing artifact: explicit load profile
+
+- 4,400 UHNW  
+- ~30 signals/day/client  
+- ~130k events/day  
+- Peak burst: market open  
+
+---
+
+## 19) Cost Explosion Risk (FinOps) (MISSING)
+
+**Q:** What prevents AI and data ingestion costs from spiraling?
+
+### Why this is asked
+
+Finance teams will block rollout otherwise.
+
+### Current state
+
+- ⚠️ Token cost mentioned  
+- ❌ No enforcement  
+
+### Expected answer
+
+- Hard caps on:
+  - AI tokens/day
+  - Ingestion frequency
+- Priority scoring:
+  - RED signals only get AI
+- Scheduled cost reviews
+
+### Missing controls
+
+```ts
+if (dailyTokenSpend > budgetLimit) {
+  disableAIInsights()
+}
+```
+
+---
+
+## 20) Change Management & Backward Compatibility (MISSING)
+
+**Q:** How do you evolve signal definitions without breaking dashboards?
+
+### Why this is asked
+
+Signals evolve constantly in markets.
+
+### Current state
+
+- ❌ No versioning strategy  
+
+### Expected answer
+
+- Versioned signal schema
+- Backward-compatible transformations
+- Deprecation policy
+
+### Missing
+
+```ts
+signalVersion: 'v1' | 'v2'
+```
+
+---
+
+## 21) Data Quality & Trust Score (MISSING)
+
+**Q:** How does an RM know which signals to trust?
+
+### Why this is asked
+
+Trust > accuracy in advisory platforms.
+
+### Current state
+
+- ⚠️ Confidence field exists  
+- ❌ No quality scoring  
+
+### Expected answer
+
+- Introduce **Signal Trust Score** based on:
+  - Source reliability
+  - Cross-source confirmation
+  - Historical accuracy
+
+### Missing feature
+
+```ts
+trustScore = f(sourceReliability, corroboration, freshness)
+```
+
+---
+
+## 22) Audit, Legal Hold & Investigations (MISSING)
+
+**Q:** Can we freeze and replay history for regulatory investigations?
+
+### Why this is asked
+
+This is mandatory in financial institutions.
+
+### Current state
+
+- ⚠️ AuditService mentioned  
+- ❌ No legal hold capability  
+
+### Expected answer
+
+- Immutable audit logs
+- Time-travel reconstruction
+- Legal hold flags on clients
+
+---
+
+## 23) Ownership of Production Incidents (MISSING)
+
+**Q:** Who is paged at 2 AM if signals stop flowing?
+
+### Why this is asked
+
+Execs care about accountability, not tooling.
+
+### Missing
+
+- On-call rotation
+- Severity definitions
+- Incident commander role
+
+### Expected answer
+
+- Defined on-call
+- Severity matrix
+- Escalation SLAs
+
+---
+
+## 24) De-Risking External Dependencies (MISSING)
+
+**Q:** What if PrivateCircle or Zauba data is delayed or wrong?
+
+### Why this is asked
+
+Third-party data is fragile.
+
+### Expected answer
+
+- Cross-validation across sources
+- Confidence degradation
+- Manual override path
+
+---
+
+## 25) Product & Tech Boundary (MISSING)
+
+**Q:** What logic belongs in Product vs Tech vs AI?
+
+### Why this is asked
+
+Prevents tech debt and scope creep.
+
+### Expected answer
+
+- Product defines **what** signals matter
+- Tech defines **how** signals flow
+- AI explains, never decides
